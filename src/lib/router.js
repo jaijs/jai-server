@@ -3,23 +3,47 @@ const RouteObjectMaker = require('./routeObjectMaker');
 function Router() {
   return {
     stack: [],
-    get(url, callback) {
-      this.stack.push(RouteObjectMaker(callback, url, 'get'));
+    get(url, ...middleware) {
+      const n = middleware.length;
+      // for multiple middleware
+      for (let i = 1; i < n; i += 1) {
+        this.stack.push(RouteObjectMaker(middleware, url, 'get'));
+      }
     },
-    post(url, callback) {
-      this.stack.push(RouteObjectMaker(callback, url, 'post'));
+    post(url, ...middleware) {
+      const n = middleware.length;
+      // for multiple middleware
+      for (let i = 1; i < n; i += 1) {
+        this.stack.push(RouteObjectMaker(middleware, url, 'post'));
+      }
     },
-    put(url, callback) {
-      this.stack.push(RouteObjectMaker(callback, url, 'put'));
+    put(url, ...middleware) {
+      const n = middleware.length;
+      // for multiple middleware
+      for (let i = 1; i < n; i += 1) {
+        this.stack.push(RouteObjectMaker(middleware, url, 'put'));
+      }
     },
-    delete(url, callback) {
-      this.stack.push(RouteObjectMaker(callback, url, 'delete'));
+    delete(url, ...middleware) {
+      const n = middleware.length;
+      // for multiple middleware
+      for (let i = 1; i < n; i += 1) {
+        this.stack.push(RouteObjectMaker(middleware, url, 'delete'));
+      }
     },
-    options(url, callback) {
-      this.stack.push(RouteObjectMaker(callback, url, 'options'));
+    options(url, ...middleware) {
+      const n = middleware.length;
+      // for multiple middleware
+      for (let i = 1; i < n; i += 1) {
+        this.stack.push(RouteObjectMaker(middleware, url, 'options'));
+      }
     },
-    head(url, callback) {
-      this.stack.push(RouteObjectMaker(callback, url, 'head'));
+    head(url, ...middleware) {
+      const n = middleware.length;
+      // for multiple middleware
+      for (let i = 1; i < n; i += 1) {
+        this.stack.push(RouteObjectMaker(middleware, url, 'head'));
+      }
     },
     use(url, ...middleware) {
       if (typeof url === 'function') {
