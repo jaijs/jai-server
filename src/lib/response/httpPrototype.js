@@ -27,7 +27,7 @@ const responsePrototype = {
   get(key) { return this.getHeader(key); },
 
   status(statusCode) {
-    this.statusCode(statusCode);
+    this.statusCode = statusCode;
     return this;
   },
 };

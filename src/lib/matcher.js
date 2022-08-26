@@ -1,6 +1,10 @@
-function Matcher(query, url, fullMatch = false, strict = false) {
+function Matcher(q, url, fullMatch = false, strict = false) {
+  let query = q;
   if (query === undefined || url === undefined || typeof query !== 'string' || typeof url !== 'string') {
     return false;
+  }
+  if(!strict && query.slice(-1) === '/') {
+    query= query.slice(0,-1)
   }
   const catchRoutes = ['(\\*)', '(\\:[a-zA-Z_0-9$]+)'];
   const finalRegex = ['(?:(?:.)*)', '([^\\/]+)'];
