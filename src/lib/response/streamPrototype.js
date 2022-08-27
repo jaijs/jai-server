@@ -32,26 +32,29 @@ const responsePrototype = {
     );
   },
 
-  send(data) {
+  send(data = '') {
     let finalData = data;
-    this.JAI.headersToSend[HTTP2_HEADER_STATUS] = 200;
+    this.JAI.headersToSend[HTTP2_HEADER_STATUS] = this.JAI.headersToSend[HTTP2_HEADER_STATUS]
+    || 200;
     if (typeof data === 'object') {
-      this.JAI.headersToSend['Content-Type'] = 'application/json';
+      this.JAI.headersToSend['Content-Type'] = this.JAI.headersToSend['Content-Type'] || 'application/json';
 
       finalData = JSON.stringify(data);
     } else {
-      this.JAI.headersToSend['Content-Type'] = 'text/html';
+      this.JAI.headersToSend['Content-Type'] = this.JAI.headersToSend['Content-Type'] || 'text/html';
     }
-    this.respond(finalData);
-    this.end();
+    this.respond(this.JAI.headersToSend);
+    this.end(finalData);
   },
-  write(data) {
+  write(data = '') {
     this.end(data);
   },
-  json(data) {
-    this.JAI.headersToSend['Content-Type'] = 'application/json';
-    this.JAI.headersToSend[HTTP2_HEADER_STATUS] = 200;
-    this.end(JSON.stringify(data));
+  json(data = '') {
+    this.JAI.headersToSend['Content-Type'] = this.JAI.headersToSend['Content-Type'] || 'application/json';
+    this.JAI.headersToSend[HTTP2_HEADER_STATUS] = this.JAI.headersToSend[HTTP2_HEADER_STATUS]
+    || 200;
+    this.respond(this.JAI.headersToSend);
+    this.end(typeof data === 'object' ? JSON.stringify(data) : data);
   },
 
   set(key, value) {

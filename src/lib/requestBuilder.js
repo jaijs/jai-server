@@ -5,6 +5,7 @@ const responsePrototype = require('./response/httpPrototype');
 
 async function Request(req, res, stack) {
   try {
+    res.set('X-Powered-By', 'JAI-SERVER');
     const mwLength = stack.length;
     return await Next(req, res, 0, mwLength, stack)();
   } catch (error) {
