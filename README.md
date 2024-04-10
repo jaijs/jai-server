@@ -3,7 +3,7 @@ Fast, simple, secure, powerful web Framework for node.
 
 ---
 [![Twitter Follow](https://img.shields.io/twitter/follow/hsk11?label=Follow)](https://twitter.com/intent/follow?screen_name=hsk11)
-[![Linkedin: Harpal Singh](https://img.shields.io/badge/-harpalsingh11-blue?style=flat-square&logo=Linkedin&logoColor=white&link=https://www.linkedin.com/in/harpalsingh11)](https://www.linkedin.com/in/harpalsingh11/)
+[![Linkedin: Harpal Singh](https://img.shields.io/badge/-harpalsingh11-blue?style=flat-square&logo=Linkedin&logoColor=white&link=https://www.linkedin.com/in/hsk11)](https://www.linkedin.com/in/hsk11/)
 [![GitHub followers](https://img.shields.io/github/followers/hsk11?label=Follow&style=social)](https://github.com/hsk11)
 ---
 
