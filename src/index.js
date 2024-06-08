@@ -3,6 +3,7 @@ const defaultConfig = require('./config');
 const JaiRequestBuilder = require('./lib/requestBuilder');
 const Router = require('./lib/router');
 const AddProtoTypes = require('./lib/addPrototype');
+const jaiBodyParser = require('jai-body-parser');
 
 function CreateServer(config, stack) {
   const options = config;
@@ -94,6 +95,8 @@ function JaiServer(options = {}) {
     const JaiStatic = require('jai-static');
     jaiApp.use(JaiStatic(options.static));
   }
+  app.use(jaiBodyParser(options.bodyParser));
+
   return jaiApp;
 }
 
