@@ -1,6 +1,6 @@
 const path = require('path');
-const matcher = require('./matcher');
-const RouteObjectMaker = require('./routeObjectMaker');
+const matcher = require('jai-server/src/lib/matcher');
+const RouteObjectMaker = require('jai-server/src/lib/routeObjectMaker');
 
 function Next(req, res, i, mwLength, stack, contUrl = '/') {
   return async function NextHandler() {
@@ -9,28 +9,47 @@ function Next(req, res, i, mwLength, stack, contUrl = '/') {
         const prevUrl = contUrl;
         const middleware = stack[i];
 
-        const { url } = middleware;
-
-        const nextUrl = path.join(prevUrl, (url === null ? '' : url));
-        const handlerType = typeof middleware.handler;
+        const { url, isUse } = middleware;
         let params = [];
-        const urlMatched = url === null ? true : params = matcher(nextUrl, req.url.split('?')[0], handlerType === 'function');
+        let urlMatched, handlerType, nextUrl;
+        if(url && Array.isArray(url)) {
+
+          for(let j = 0; j < url.length; j++) {
+            nextUrl = path.join(prevUrl, (url[j] === null ? '' : url[j]));
+            handlerType = typeof middleware.handler;
+            urlMatched = url[j] === null ? true : params = matcher(nextUrl, req.url.split('?')[0], !isUse && handlerType === 'function');
+            if(urlMatched) {
+              break;
+            }
+          }
+
+        }else{
+         nextUrl = path.join(prevUrl, (url === null ? '' : url));
+         handlerType = typeof middleware.handler;
+         urlMatched = url === null ? true : params = matcher(nextUrl, req.url.split('?')[0], !isUse && handlerType === 'function');
+        }
+
         const methodMatched = middleware.method === null ? true
           : req.method.toLowerCase() === middleware.method.toLowerCase();
 
+
         if (handlerType === 'function' && urlMatched && methodMatched) {
-          // normal middleware
+          // Normal middleware
           req.params = params;
-          return await middleware.handler(req, res, Next(req, res, i + 1, mwLength, stack));
+          return await middleware.handler(
+            req,
+            res,
+            Next(req, res, i + 1, mwLength, stack, contUrl),
+          );
         } if (handlerType === 'object' && urlMatched && methodMatched) {
-          // routed middleware
+          // Routed middleware
           const routerLn = middleware.handler.stack.length;
 
           return await Next(req, res, 0, routerLn + 1, [...middleware.handler.stack,
             // Preview Next middleware
             RouteObjectMaker(Next(req, res, i + 1, mwLength, stack, prevUrl))], nextUrl)();
         }
-        // Incase  the routed middleware is not Matched
+        // Incase the routed middleware is not Matched
         return await Next(req, res, i + 1, mwLength, stack, prevUrl)();
       } // end of the iteration
       // last default middleware

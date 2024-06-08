@@ -1,5 +1,5 @@
 const http2 = require('http2');
-const responsePrototype = require('./httpPrototype');
+const responsePrototype = require('jai-server/src/lib/response/httpPrototype');
 
 class JaiResponseHTTP2 extends http2.Http2ServerResponse {
   constructor(...stream) {

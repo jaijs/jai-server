@@ -1,6 +1,6 @@
 {
   "name": "jai-server",
-  "version": "1.4.6",
+  "version": "1.4.7",
   "description": "Fast , simple and powerful web framework. RESTFul API server",
   "keywords": [
     "server",

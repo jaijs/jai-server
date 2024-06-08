@@ -33,7 +33,12 @@ const responsePrototype = {
   set(key, value) {
     this.setHeader(key, value);
   },
-
+  redirect(link, statusCode = 302) {
+    this.writeHead(statusCode, {
+      Location: link,
+    });
+    this.end();
+  },
   get(key) { return this.getHeader(key); },
 
   status(statusCode) {

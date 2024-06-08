@@ -32,11 +32,16 @@ function Matcher(q, url, fullMatch = false, strict = false) {
     const paramsKeys = Object.keys(params);
 
     for (let i = 1; i < matched.length; i += 1) {
+      if(isNaN(matched[i])){
       params[paramsKeys[i - 1]] = matched[i];
+      }else{
+        params[paramsKeys[i - 1]] = Number(matched[i]);
+      }
     }
     return params;
   }
   return false;
 }
+
 
 module.exports = Matcher;

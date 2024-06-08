@@ -1,7 +1,7 @@
-const Next = require('./next');
-const AddRequestPrototype = require('./request/httpPrototype');
-const addPrototype = require('./addPrototype');
-const responsePrototype = require('./response/httpPrototype');
+const Next = require('jai-server/src/lib/next');
+const AddRequestPrototype = require('jai-server/src/lib/request/httpPrototype');
+const addPrototype = require('jai-server/src/lib/addPrototype');
+const responsePrototype = require('jai-server/src/lib/response/httpPrototype');
 
 async function Request(req, res, stack) {
   try {
@@ -18,11 +18,17 @@ async function Request(req, res, stack) {
   }
 }
 
-function RequestBuilder(stack, config) {
+function RequestBuilder(config, stack) {
+ 
   return function RequestHandler(req, res) {
+    
+    // add response prototype
+   // const stack = this.stack;
+    req.body = {};
+    addPrototype(res, responsePrototype);
+
     if ((config.http2 && config.https) || req.httpVersion === '2.0') {
-      // add response prototype
-      addPrototype(res, responsePrototype);
+
       req.ip = req.socket.remoteAddress;
       req.port = req.socket.localPort;
       if (req.httpVersion === '2.0') {
