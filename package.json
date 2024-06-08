@@ -16,7 +16,9 @@
     "framework",
     "full stack",
     "rest api",
-    "restful api"
+    "restful api",
+    "node.js server",
+    "node server"
   ],
   "main": "./src/index.js",
   "scripts": {
