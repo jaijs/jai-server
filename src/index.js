@@ -21,7 +21,7 @@ function JaiServer(options) {
     const JaiStatic = require('jai-static');
     jaiApp.use(JaiStatic(options.static));
   }
-  app.use(jaiBodyParser(options.bodyParser));
+  jaiApp.use(jaiBodyParser(options.bodyParser));
   return jaiApp;
 
 }
