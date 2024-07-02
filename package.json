@@ -1,7 +1,7 @@
 {
   "name": "jai-server",
-  "version": "1.4.8",
-  "description": "Fast , simple and powerful web framework. RESTFul API server",
+  "version": "1.4.9",
+  "description": "Fast , simple and powerful web framework for creating REST APIs for your next project. RESTFul API server",
   "keywords": [
     "server",
     "http server",
@@ -18,7 +18,27 @@
     "rest api",
     "restful api",
     "node.js server",
-    "node server"
+    "node server",
+    "middleware",
+    "middleware server",
+    "middleware framework",
+    "rest api server",
+    "restful api server",
+    "web server",
+    "web framework",
+    "web app",
+    "web api",
+    "web api server",
+    "web rest api",
+    "web restful api",
+    "web rest api server",
+    "web restful api server",
+    "web middleware",
+    "web middleware server",
+    "nodejs server",
+    "nodejs api server",
+    "nodejs rest api server",
+    "web framework server"
   ],
   "main": "./src/index.js",
   "scripts": {
@@ -36,10 +56,8 @@
     "url": "https://github.com/jaijs/jai-server"
   },
   "dependencies": {
-    "i": "^0.3.7",
     "jai-body-parser": "^1.1.3",
-    "jai-static": "^1.0.13",
-    "npm": "^10.8.1"
+    "jai-static": "^1.0.13"
   },
   "devDependencies": {
     "eslint": "^8.20.0",

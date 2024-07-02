@@ -11,27 +11,26 @@ function Next(req, res, i, mwLength, stack, contUrl = '/') {
 
         const { url, isUse } = middleware;
         let params = [];
-        let urlMatched, handlerType, nextUrl;
-        if(url && Array.isArray(url)) {
-
-          for(let j = 0; j < url.length; j++) {
+        let urlMatched;
+        let handlerType;
+        let nextUrl;
+        if (url && Array.isArray(url)) { // if the url is an array
+          for (let j = 0; j < url.length; j++) {
             nextUrl = path.join(prevUrl, (url[j] === null ? '' : url[j]));
             handlerType = typeof middleware.handler;
             urlMatched = url[j] === null ? true : params = matcher(nextUrl, req.url.split('?')[0], !isUse && handlerType === 'function');
-            if(urlMatched) {
+            if (urlMatched) {
               break;
             }
           }
-
-        }else{
-         nextUrl = path.join(prevUrl, (url === null ? '' : url));
-         handlerType = typeof middleware.handler;
-         urlMatched = url === null ? true : params = matcher(nextUrl, req.url.split('?')[0], !isUse && handlerType === 'function');
+        } else {
+          nextUrl = path.join(prevUrl, (url === null ? '' : url));
+          handlerType = typeof middleware.handler;
+          urlMatched = url === null ? true : params = matcher(nextUrl, req.url.split('?')[0], !isUse && handlerType === 'function');
         }
 
         const methodMatched = middleware.method === null ? true
           : req.method.toLowerCase() === middleware.method.toLowerCase();
-
 
         if (handlerType === 'function' && urlMatched && methodMatched) {
           // Normal middleware
