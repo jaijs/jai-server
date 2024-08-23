@@ -8,7 +8,7 @@ const AddProtoTypes = require('jai-server/src/lib/addPrototype');
 const jaiBodyParser = require('jai-body-parser');
 
 
-function JaiServer(options) {
+function JaiServer(options={}) {
   // let server = null;
   const config = {
     ...defaultConfig, ...options,
