@@ -1,53 +1,52 @@
-const RouteObjectMaker = require('jai-server/src/lib/routeObjectMaker');
+const RouteObjectMaker = require('./routeObjectMaker');
 
 function Router() {
-  const routeObj= {
+  const routeObj = {
     stack: [],
     get(url, ...middleware) {
       const n = middleware.length;
       // for multiple middleware
       for (let i = 0; i < n; i += 1) {
-       
-        this.stack.push(RouteObjectMaker(middleware[i], url, 'get'));
+        this.stack.push(RouteObjectMaker(middleware[i], url, 'GET'));
       }
     },
     post(url, ...middleware) {
       const n = middleware.length;
       // for multiple middleware
       for (let i = 0; i < n; i += 1) {
-        this.stack.push(RouteObjectMaker(middleware[i], url, 'post'));
+        this.stack.push(RouteObjectMaker(middleware[i], url, 'POST'));
       }
     },
     put(url, ...middleware) {
       const n = middleware.length;
       // for multiple middleware
       for (let i = 0; i < n; i += 1) {
-        this.stack.push(RouteObjectMaker(middleware[i], url, 'put'));
+        this.stack.push(RouteObjectMaker(middleware[i], url, 'PUT'));
       }
     },
     delete(url, ...middleware) {
       const n = middleware.length;
       // for multiple middleware
       for (let i = 0; i < n; i += 1) {
-        this.stack.push(RouteObjectMaker(middleware[i], url, 'delete'));
+        this.stack.push(RouteObjectMaker(middleware[i], url, 'DELETE'));
       }
     },
     options(url, ...middleware) {
       const n = middleware.length;
       // for multiple middleware
       for (let i = 0; i < n; i += 1) {
-        this.stack.push(RouteObjectMaker(middleware[i], url, 'options'));
+        this.stack.push(RouteObjectMaker(middleware[i], url, 'OPTIONS'));
       }
     },
     head(url, ...middleware) {
       const n = middleware.length;
       // for multiple middleware
       for (let i = 0; i < n; i += 1) {
-        this.stack.push(RouteObjectMaker(middleware[i], url, 'head'));
+        this.stack.push(RouteObjectMaker(middleware[i], url, 'HEAD'));
       }
     },
-    use(url, ...middleware) {     
-       const n = middleware.length;
+    use(url, ...middleware) {
+      const n = middleware.length;
       if (typeof url === 'function') {
         // url is a middleware
         this.stack.push(RouteObjectMaker(url, null, null, true));
@@ -65,15 +64,10 @@ function Router() {
       }
 
       // for multiple middleware
-
-
     },
   };
 
-
-
-  
-  return  routeObj;
+  return routeObj;
 }
 
 module.exports = Router;

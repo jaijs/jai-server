@@ -5,7 +5,6 @@ function RouteObjectMaker(callback, url = null, method = null, isUse = false) {
     handler: callback,
     isUse,
 
-
   };
 }
 

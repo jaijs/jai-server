@@ -5,10 +5,16 @@ function AddRequestPrototype(req, config) {
   req.path = parsedUrl.pathname;
   req.host = config.host;
   req.port = config.port;
-  req.query = [...(parsedUrl.searchParams)].reduce((acc, [key, value]) => {
-    acc[key] = value;
-    return acc;
-  }, {});
+  req.query = {};
+  const entries = Array.from(parsedUrl.searchParams);
+  
+  for (let i = 0; i < entries.length; i++) {
+    const [key, value] = entries[i];
+    req.query[key] = value;
+  }
+
+  req.ip = req.socket.remoteAddress;
+  req.port = req.socket.address().port;
 }
 
 module.exports = AddRequestPrototype;

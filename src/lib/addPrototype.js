@@ -7,10 +7,10 @@ function AddProtoTypes(addTo, props, perfect = false) {
     const value = props[key];
     if (!Object.prototype.hasOwnProperty.call(main, key) && value) {
       if (perfect) {
-        main.__proto__[key] = value;
-      }
-      else{
-      main[key] = value;
+        const proto = Object.getPrototypeOf(main);
+        proto[key] = value;
+      } else {
+        main[key] = value;
       }
     }
   }

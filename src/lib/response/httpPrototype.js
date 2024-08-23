@@ -17,7 +17,7 @@ const responsePrototype = {
         this.getHeader('Content-Type') || 'text/html',
       });
     }
-    this.write(finalData);
+    this.write(finalData+"");
     this.end();
   },
 

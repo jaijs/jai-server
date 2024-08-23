@@ -1,21 +1,20 @@
 /* eslint-disable  global-require */
-const Router = require('jai-server/src/lib/router');
-const defaultConfig = require('jai-server/src/config');
-const JaiRequestBuilder = require('jai-server/src/lib/requestBuilder');
-const getProto = require('jai-server/src/serverProto');
+const Router = require('./lib/router');
+const defaultConfig = require('./config');
+const JaiRequestBuilder = require('./lib/requestBuilder');
+const getProto = require('./serverProto');
 
-const AddProtoTypes = require('jai-server/src/lib/addPrototype');
+const AddProtoTypes = require('./lib/addPrototype');
 const jaiBodyParser = require('jai-body-parser');
 
-
-function JaiServer(options={}) {
+function JaiServer(options = {}) {
   // let server = null;
   const config = {
     ...defaultConfig, ...options,
   };
-  const protoType= getProto(config);
-  const requestHandler = JaiRequestBuilder( config, protoType.stack);
-  const jaiApp  = AddProtoTypes(requestHandler, protoType);
+  const protoType = getProto(config);
+  const requestHandler = JaiRequestBuilder(config, protoType.stack);
+  const jaiApp = AddProtoTypes(requestHandler, protoType);
 
   if (config.static) {
     const JaiStatic = require('jai-static');
@@ -23,11 +22,7 @@ function JaiServer(options={}) {
   }
   jaiApp.use(jaiBodyParser(options.bodyParser));
   return jaiApp;
-
 }
 
-
-
-
-module.exports = (AddProtoTypes(JaiServer, {Router}));
+module.exports = (AddProtoTypes(JaiServer, { Router }));
 /* eslint-disable  global-require */

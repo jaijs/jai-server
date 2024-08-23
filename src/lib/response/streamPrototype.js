@@ -44,7 +44,7 @@ const responsePrototype = {
       this.JAI.headersToSend['Content-Type'] = this.JAI.headersToSend['Content-Type'] || 'text/html';
     }
     this.respond(this.JAI.headersToSend);
-    this.end(finalData);
+    this.end(`${finalData}`);
   },
   write(data = '') {
     this.end(data);
