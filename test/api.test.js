@@ -22,7 +22,7 @@ describe('Jai-Server Tests', () => {
     await Promise.reject(new Error('Async error'));
   };
 
-  beforeEach(() => {
+  beforeEach((done) => {
     try {
       app = new JaiServer({
         static:{
@@ -34,8 +34,7 @@ describe('Jai-Server Tests', () => {
       app.use('/error-middleware', errorMiddleware, (req, res) => res.send('OK'));
       app.use('/set-error', setErrorMiddleware, (req, res) => res.send('OK'));
       app.use('/async-error', asyncErrorMiddleware, (req, res) => res.send('OK'));
-      console.log(app.stack)
-     server =  app.listen(3000);
+     server =  app.listen(3000,done);
  
     } catch(e) {
       console.error("Error starting server:", e);
