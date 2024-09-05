@@ -17,6 +17,7 @@ jobs:
         run: |
           npm install --package-lock-only
           npm ci
+          npm run build
       
       - name: Run linting
         run: npm run lint

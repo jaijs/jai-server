@@ -3,8 +3,8 @@ import AddRequestPrototype from './request/httpPrototype';
 import AddResponsePrototype from './response/addResponseProto';
 import {ErrorHandler500} from './request/errorHandler';
 
-import { JaiServerConfig, ExtendedServerResponse, RouteObject,RequestHandlerExtended, RequestObject } from '../types/types';
-function RequestBuilder(config: JaiServerConfig, stack: RouteObject[]):RequestHandlerExtended {
+import { JaiServerConfig, ExtendedServerResponse, Router,RequestHandlerExtended, RequestObject } from '../types/types';
+function RequestBuilder(config: JaiServerConfig,  router:Router ):RequestHandlerExtended {
   return function RequestHandler(req: RequestObject, res: ExtendedServerResponse) {
 
 
@@ -21,9 +21,8 @@ function RequestBuilder(config: JaiServerConfig, stack: RouteObject[]):RequestHa
     }
 
     res.setHeader('X-Powered-By', 'JAI-SERVER');
-
-    Next(req, res, 0, stack.length, stack, '/')()?.catch((error:Error) => ErrorHandler500(res, error));
-  };
+    Next(req, res, 0, router.stack.length, router.stack, '/')()?.catch((error:Error) => ErrorHandler500(res, error));
+  } 
 }
 
 export default RequestBuilder;
