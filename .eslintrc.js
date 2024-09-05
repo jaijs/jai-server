@@ -1,15 +1,14 @@
 module.exports = {
-  env: {
-    browser: true,
-    commonjs: true,
-    es2021: true,
-  },
+  parser: '@typescript-eslint/parser',
+  plugins: ['@typescript-eslint'],
   extends: [
-    'airbnb-base',
+    'eslint:recommended',
+    'plugin:@typescript-eslint/recommended',
   ],
-  parserOptions: {
-    ecmaVersion: 'latest',
-  },
   rules: {
+ 
+    '@typescript-eslint/no-explicit-any': 'off',
+    'no-useless-escape': 'error',
+    "@typescript-eslint/no-unsafe-function-type": "off",
   },
 };
