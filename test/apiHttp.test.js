@@ -22,6 +22,7 @@ describe('Jai-Server Tests', () => {
   };
 
   beforeEach((done) => {
+
     try {
       app = new JaiServer({
         static: {
@@ -43,11 +44,9 @@ describe('Jai-Server Tests', () => {
   });
 
   afterEach((done) => {
-    setImmediate(() => {
-      setTimeout(()=>server.close(() => {
+    server.close(() => {
         done();
-      }), 0);
-    });
+      })
   });
 
  

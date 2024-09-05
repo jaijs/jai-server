@@ -43,11 +43,9 @@ describe('Jai-Server Tests', () => {
   });
 
   afterEach((done) => {
-    setImmediate(() => {
-    server.close(()=>{
+    server.close(() => {
       done();
-    });
-    });
+    })
   });
 
   // Basic routing
