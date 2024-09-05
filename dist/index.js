@@ -1,11 +1,14 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-var router_1 = require("./lib/router");
-var serverProto_1 = require("./serverProto");
-var addPrototype_1 = require("./lib/addPrototype");
-var jai_body_parser_1 = require("jai-body-parser");
-var jai_static_1 = require("jai-static");
-var defaultConfig = {
+const router_1 = __importDefault(require("./lib/router"));
+const serverProto_1 = __importDefault(require("./serverProto"));
+const addPrototype_1 = __importDefault(require("./lib/addPrototype"));
+const jai_body_parser_1 = __importDefault(require("jai-body-parser"));
+const jai_static_1 = __importDefault(require("jai-static"));
+const defaultConfig = {
     host: 'localhost',
     port: 3000,
     static: null,
@@ -15,15 +18,14 @@ var defaultConfig = {
     allowHTTP1: true,
     protocol: 'http',
 };
-function JaiServer(config) {
-    if (config === void 0) { config = defaultConfig; }
-    var _a = serverProto_1.default.bind({})({
+function JaiServer(config = defaultConfig) {
+    const { proto, requestHandler } = serverProto_1.default.bind({})({
         http2: config.http2,
         https: config.https,
         allowHTTP1: config.allowHTTP1,
         host: config.host,
-    }), proto = _a.proto, requestHandler = _a.requestHandler;
-    var jaiApp = (0, addPrototype_1.default)(requestHandler, proto);
+    });
+    const jaiApp = (0, addPrototype_1.default)(requestHandler, proto);
     jaiApp.stack = proto.stack;
     if (config.static) {
         jaiApp.use((0, jai_static_1.default)(config.static));
@@ -31,5 +33,5 @@ function JaiServer(config) {
     jaiApp.use((0, jai_body_parser_1.default)(config.bodyParser));
     return jaiApp;
 }
-var Jai_ = (0, addPrototype_1.default)(JaiServer, { Router: router_1.default });
-exports.default = Jai_;
+const Jai_ = (0, addPrototype_1.default)(JaiServer, { Router: router_1.default });
+module.exports = Jai_;

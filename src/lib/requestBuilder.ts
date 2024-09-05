@@ -1,12 +1,11 @@
-import { IncomingMessage } from 'http';
 import Next from './next';
 import AddRequestPrototype from './request/httpPrototype';
 import AddResponsePrototype from './response/addResponseProto';
 import {ErrorHandler500} from './request/errorHandler';
 
-import { JaiServerConfig, ExtendedServerResponse, RouteObject,RequestHandlerExtended } from '../types/types';
+import { JaiServerConfig, ExtendedServerResponse, RouteObject,RequestHandlerExtended, RequestObject } from '../types/types';
 function RequestBuilder(config: JaiServerConfig, stack: RouteObject[]):RequestHandlerExtended {
-  return function RequestHandler(req: IncomingMessage, res: ExtendedServerResponse) {
+  return function RequestHandler(req: RequestObject, res: ExtendedServerResponse) {
 
 
     AddRequestPrototype(req, config);

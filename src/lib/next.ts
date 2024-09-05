@@ -7,7 +7,7 @@ import { RouteObject, Params, HandlerFunction, ErrorHandlerFunction } from '../t
 
 
 // Type guard to check if handler is a function
-function isHandlerFunction(handler: any): handler is HandlerFunction | ErrorHandlerFunction {
+function isHandlerFunction(handler: unknown): handler is HandlerFunction | ErrorHandlerFunction {
   return typeof handler === 'function';
 }
 

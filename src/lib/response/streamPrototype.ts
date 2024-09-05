@@ -6,9 +6,9 @@ interface ExtendedServerResponse extends ServerHttp2Stream {
     headersToSend: Record<string, string | number>;
   };
   sendFile: (filePath: string) => void;
-  send: (data?: any) => void;
-  write: (data?: any) => boolean;
-  json: (data?: any) => void;
+  send: (data?: string|object|number) => void;
+  write: (data?:  string|object|number) => boolean;
+  json: (data?: object) => void;
   set: (key: string, value: string) => void;
   get: (key: string) => string | undefined;
   status: (statusCode: number) => ExtendedServerResponse;

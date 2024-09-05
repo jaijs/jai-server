@@ -30,7 +30,7 @@ function Matcher(q: string | undefined, url: string | undefined, fullMatch: bool
     return match as string;
   });
 
-  const matchRegex = new RegExp((fullMatch ? '^' : '') + finalQuery + (!strict ? '\/{0,1}' : '') + (fullMatch ? '$' : ''));
+  const matchRegex = new RegExp((fullMatch ? '^' : '') + finalQuery + (!strict ? '/{0,1}' : '') + (fullMatch ? '$' : ''));
   const matched = url.match(matchRegex);
 
   if (matched) {

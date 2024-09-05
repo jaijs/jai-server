@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 function AddRequestPrototype(req, config) {
-    var extendedReq = req;
+    const extendedReq = req;
     extendedReq.body = {};
-    var host = req.headers.host;
-    var parsedUrl = new URL("http://".concat(host).concat(req.url));
+    const { host } = req.headers;
+    const parsedUrl = new URL(`http://${host}${req.url}`);
     extendedReq.protocol = config.protocol;
     extendedReq.path = parsedUrl.pathname;
     extendedReq.host = config.host;

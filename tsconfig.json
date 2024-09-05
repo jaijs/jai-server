@@ -1,10 +1,25 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "strict": false,
     "module": "commonjs",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "strictNullChecks": true,
+    "moduleResolution": "node",
+    "noUnusedParameters": true,
+    "noUnusedLocals": true,
+    "target": "es2018",
     "declaration": true,
     "outDir": "./dist",
-    "strict": true
+    "noImplicitAny": true,
+    "importHelpers": false,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedIndexedAccess": true,
+    "lib": ["es2018"],
+    "noEmitOnError": false,
+    "sourceMap": false,
+    "removeComments": true
   },
   "include": [
     "src",

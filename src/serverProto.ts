@@ -37,8 +37,9 @@ class JaiServerFactory {
       serverOptions.Http1ServerResponse = ServerResponseHttp as typeof ServerResponse;
       serverOptions.Http2ServerResponse = ServerResponseHttp2
       return createServerHttp2(serverOptions, requestHandler);
-    } catch (e) {
+    } catch (_e) {
       console.warn('HTTP/2 is not supported, falling back to HTTP/1.1');
+      console.warn(_e);
       delete serverOptions.Http2ServerResponse 
       delete serverOptions.Http1ServerResponse
       serverOptions.ServerResponse = ServerResponseHttp 
@@ -77,7 +78,7 @@ function createProto(config: JaiServerConfig): {proto:JaiProto, requestHandler: 
     },
   };
   const requestHandler = JaiRequestBuilder(config, proto.stack)
-  var server: JaiServer =JaiServerFactory.createJaiServer(config, requestHandler);
+  const server: JaiServer =JaiServerFactory.createJaiServer(config, requestHandler);
   return {proto, requestHandler, server};
 }
 

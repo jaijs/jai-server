@@ -5,11 +5,10 @@ module.exports = {
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
   ],
-  parserOptions: {
-    ecmaVersion: 2020,
-    sourceType: 'module',
-  },
   rules: {
-    // Any specific rules you want to add or modify
+ 
+    '@typescript-eslint/no-explicit-any': 'off',
+    'no-useless-escape': 'error',
+    "@typescript-eslint/no-unsafe-function-type": "off",
   },
 };

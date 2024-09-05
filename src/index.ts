@@ -39,4 +39,4 @@ function JaiServer(config: ConfigMain = defaultConfig): JaiServerInstance {
   return jaiApp;
 }
 const Jai_= AddProtoTypes(JaiServer, { Router })
-export default Jai_;
+module.exports= Jai_;
