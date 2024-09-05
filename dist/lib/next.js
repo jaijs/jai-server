@@ -108,9 +108,9 @@ function Next(req, res, i, mwLength, stack, contUrl = '/') {
                     await Next(req, res, 0, routerStack.length, routerStack, isUse ? nextUrl : contUrl)(nextError);
                 }
             }
+            if (nextError)
+                throw nextError;
             if (!res.headersSent) {
-                if (nextError)
-                    throw nextError;
                 res.writeHead(404, { 'Content-Type': 'application/json' });
                 res.end(JSON.stringify({ statusCode: 404, error: 'Not Found', message: 'Not Found' }));
             }

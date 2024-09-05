@@ -1,6 +1,6 @@
 {
   "name": "jai-server",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "description": "Fast , simple and powerful web framework for creating REST APIs for your next project. RESTFul API server",
   "keywords": [
     "server",
@@ -55,7 +55,6 @@
     
   ],
   "main": "dist/index.js",
-  "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
     "prepublishOnly": "npm run build",
