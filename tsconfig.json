@@ -19,7 +19,7 @@
     "lib": ["es2018"],
     "noEmitOnError": false,
     "sourceMap": false,
-    "removeComments": true
+     "removeComments": true
   },
   "include": [
     "src",

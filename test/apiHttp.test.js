@@ -473,5 +473,40 @@ describe('Middleware Error Handling', () => {
   });
 });
 
+test('Automatic Error Handle When no Error Handler', async () => {
+  app.stack = [];
+
+  app.get('/error', (req, res) => {
+    throw new Error('Test error');
+  });
+
+  app.use((req, res, next) => {
+    res.status(500).json({ error: err.message });
+  });
+  //console.log(app.stack);
+  const response = await request(app).get('/error');
+  expect(response.status).toBe(500);
+
+
+})
+
+test('Automatic Error Handle When Error Handler available', async () => {
+  app.stack = [];
+
+  app.get('/error', (req, res) => {
+    throw new Error('Test error');
+  });
+
+  app.use((err, req, res, next) => {
+    res.status(500).json({ error: err.message });
+  });
+  //console.log(app.stack);
+  const response = await request(app).get('/error');
+  expect(response.status).toBe(500);
+  expect(response.body.error).toBe('Test error');
+
+
+})
+
 
 });

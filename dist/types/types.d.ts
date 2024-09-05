@@ -1,3 +1,8 @@
+/// <reference types="node" />
+/// <reference types="node" />
+/// <reference types="node" />
+/// <reference types="node" />
+/// <reference types="node" />
 export type HandlerFunction = (req?: any, res?: any, next?: Function) => void | Promise<void>;
 export type ErrorHandlerFunction = (error: any, req?: any, res?: any, next?: Function) => void | Promise<void>;
 import { ServerResponse } from 'http';
@@ -41,6 +46,8 @@ export type JaiProto = Router & {
     listen(port: number, host?: string, ...args: any[]): JaiServer;
     close(callback: () => void): void;
     getConfig(): JaiServerConfig;
+    server?: JaiServer;
+    requestHandler?: (req: any, res: any) => void;
 };
 export type sendFileOptions = {
     root: string;

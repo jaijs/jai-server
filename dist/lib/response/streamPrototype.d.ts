@@ -1,3 +1,4 @@
+/// <reference types="node" />
 import { ServerHttp2Stream } from 'http2';
 interface ExtendedServerResponse extends ServerHttp2Stream {
     JAI: {

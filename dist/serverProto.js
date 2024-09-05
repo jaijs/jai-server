@@ -5,16 +5,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const https_1 = require("https");
 const http2_1 = require("http2");
-const router_1 = __importDefault(require("./lib/router"));
-const requestBuilder_1 = __importDefault(require("./lib/requestBuilder"));
 const http_1 = require("http");
 const http_2 = __importDefault(require("./lib/response/http"));
 const http2_2 = __importDefault(require("./lib/response/http2"));
+const requestBuilder_1 = __importDefault(require("./lib/requestBuilder"));
 class JaiServerFactory {
     constructor() { }
-    static createJaiServer(config, requestHandler) {
+    static createJaiServer(config, routes) {
         const options = { ...config };
         const serverOptions = this.getServerOptions(options);
+        const requestHandler = (0, requestBuilder_1.default)(options, routes);
         if (options.http2) {
             return this.createHttp2Server(options, serverOptions, requestHandler);
         }
@@ -49,17 +49,19 @@ class JaiServerFactory {
         }
     }
 }
-function createProto(config) {
-    const routes = (0, router_1.default)();
+function createProto(config, routes) {
     const proto = {
         ...routes,
         listen(port, host = config.host || '', ...args) {
-            return server.listen(port, host, ...args);
+            const server = JaiServerFactory.createJaiServer(config, routes);
+            this.server = server;
+            return this.server.listen(port, host, ...args);
         },
         close(callback) {
-            if (server) {
-                server.close(callback);
-                server === null || server === void 0 ? void 0 : server.closeAllConnections();
+            var _a;
+            if (this.server) {
+                this.server.close(callback);
+                (_a = this.server) === null || _a === void 0 ? void 0 : _a.closeAllConnections();
             }
             else {
                 callback();
@@ -69,8 +71,6 @@ function createProto(config) {
             return { ...config };
         },
     };
-    const requestHandler = (0, requestBuilder_1.default)(config, proto.stack);
-    const server = JaiServerFactory.createJaiServer(config, requestHandler);
-    return { proto, requestHandler, server };
+    return proto;
 }
 exports.default = createProto;

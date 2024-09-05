@@ -48,6 +48,8 @@ export type JaiProto = Router & {
   listen(port: number, host?: string, ...args: any[]): JaiServer;
   close(callback: () => void): void;
   getConfig(): JaiServerConfig;
+  server?: JaiServer;
+  requestHandler?: (req: any, res: any) => void;
 }
 
 

@@ -1,7 +1,6 @@
 {
   "name": "jai-server",
-
-  "version": "1.5.1",
+  "version": "1.5.11",
   "description": "Fast , simple and powerful web framework for creating REST APIs for your next project. RESTFul API server",
   "keywords": [
     "server",
@@ -48,17 +47,16 @@
     "restify",
     "sails",
     "loopback",
-    "nest", 
+    "nest",
     "nestjs",
     "adonis",
     "rest apis",
     "restful apis"
-    
   ],
   "main": "dist/index.js",
-
+  "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && node build.js",
     "prepublishOnly": "npm run build",
     "start": "node ./dist/index.js",
     "lint": "eslint --ext .js,.ts src",

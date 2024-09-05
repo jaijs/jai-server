@@ -7,7 +7,7 @@ const next_1 = __importDefault(require("./next"));
 const httpPrototype_1 = __importDefault(require("./request/httpPrototype"));
 const addResponseProto_1 = __importDefault(require("./response/addResponseProto"));
 const errorHandler_1 = require("./request/errorHandler");
-function RequestBuilder(config, stack) {
+function RequestBuilder(config, router) {
     return function RequestHandler(req, res) {
         var _a;
         (0, httpPrototype_1.default)(req, config);
@@ -21,7 +21,7 @@ function RequestBuilder(config, stack) {
             req.port = req.socket.localPort;
         }
         res.setHeader('X-Powered-By', 'JAI-SERVER');
-        (_a = (0, next_1.default)(req, res, 0, stack.length, stack, '/')()) === null || _a === void 0 ? void 0 : _a.catch((error) => (0, errorHandler_1.ErrorHandler500)(res, error));
+        (_a = (0, next_1.default)(req, res, 0, router.stack.length, router.stack, '/')()) === null || _a === void 0 ? void 0 : _a.catch((error) => (0, errorHandler_1.ErrorHandler500)(res, error));
     };
 }
 exports.default = RequestBuilder;
