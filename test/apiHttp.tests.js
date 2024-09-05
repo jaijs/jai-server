@@ -2,6 +2,7 @@ const request = require('supertest');
 var JaiServer = require('../dist/index');
 const http = require('http');
 const path = require('path');
+ 
 describe('Jai-Server Tests', () => {
   let app;
   let server;
@@ -21,7 +22,7 @@ describe('Jai-Server Tests', () => {
     await Promise.reject(new Error('Async error'));
   };
 
-  beforeEach((done) => {
+  beforeAll((done) => {
 
     try {
       app = new JaiServer({
@@ -29,13 +30,11 @@ describe('Jai-Server Tests', () => {
           dir: path.join(__dirname, 'public')
         }
       });
-      const randomPort = Math.floor(Math.random() * 1000) + 3000;
+      const randomPort = Math.floor(Math.random() * 1000) + 4000;
       server = http.createServer(app).listen(randomPort,()=>{
         done()
       });
-      app.use('/error-middleware', errorMiddleware, (req, res) => res.send('OK'));
-      app.use('/set-error', setErrorMiddleware, (req, res) => res.send('OK'));
-      app.use('/async-error', asyncErrorMiddleware, (req, res) => res.send('OK'));
+
 
     } catch (e) {
       console.error("Error starting server:", e);
@@ -43,7 +42,7 @@ describe('Jai-Server Tests', () => {
     }
   });
 
-  afterEach((done) => {
+  afterAll((done) => {
     server.close(() => {
         done();
       })
