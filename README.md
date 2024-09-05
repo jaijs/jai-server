@@ -1,163 +1,275 @@
-# Jai Server
-Fast, simple, secure, powerful web Framework for node.
-
----
+# Jai Server: Ultra-Fast, Secure Node.js Web Framework
 
 [![Twitter Follow](https://img.shields.io/twitter/follow/hsk11dev?label=Follow)](https://twitter.com/intent/follow?screen_name=hsk11dev)
-[![Linkedin: Harpal Singh](https://img.shields.io/badge/-harpalsingh11-blue?style=flat-square&logo=Linkedin&logoColor=white&link=https://www.linkedin.com/in/hsk11)](https://www.linkedin.com/in/hsk11/)
-
+[![Linkedin: Harpal Singh](https://img.shields.io/badge/-hsk11-blue?style=flat-square&logo=Linkedin&logoColor=white&link=https://www.linkedin.com/in/hsk11)](https://www.linkedin.com/in/hsk11/)
 [![GitHub followers](https://img.shields.io/github/followers/hsk11?label=Follow&style=social)](https://github.com/hsk11)
----
 
 
+Jai Server is an ultra-high-performance, easy-to-use web framework for Node.js, engineered for building lightning-fast and highly scalable web applications and APIs.
 
-## Features
+![Jai Logo](public/Jai_js.jpg)
 
-- Ready to use
-- Create REST APIs
-- Easy to configure
-- Server Static Files
-- Create Multiple Routes
-- Control API flow
-- Supported Http Methods : GET, POST, PUT, PATCH, OPTIONS, HEAD, DELETE
+With its innovative lightweight architecture and powerful features, Jai Server dramatically outperforms popular frameworks like Express.js while maintaining simplicity, flexibility, and developer-friendly ergonomics.
 
-
-
-
-
-## Installation
-
-Install my-project with npm
+## 🚀 Quick Start
 
 ```bash
-  npm install jai-server
+npm install jai-server
 ```
 
-### Usage / Examples
-
-#### Hello World
 ```javascript
 const JaiServer = require('jai-server');
 
-const app = JaiServer(/* options */);
+const app = JaiServer();
 
 app.get('/', (req, res) => {
-  res.send('Hello World!');
+  res.send('Hello, Jai Server!');
 });
 
-app.listen({ port: 3000 }, (...args) => {
-  console.log('Server is running on port http://localhost:3000', args);
+app.listen({ port: 3000 }, () => {
+  console.log('Jai Server is running on http://localhost:3000');
 });
-
 ```
 
-#### Serve Static Files
+## 🌟 Features
+
+- ✅ **Ready to use**: Minimal setup required for rapid development #easy-setup
+- 🔄 **RESTful API support**: Create robust APIs with ease #rest-api
+- ⚙️ **Flexible configuration**: Easily adapt to your project needs #customizable
+- 📁 **Static file serving**: Effortlessly serve static content #static-files
+- 🛣️ **Advanced routing**: Powerful and intuitive routing system #routing
+- 🔀 **Middleware support**: Fine-grained control over request/response flow #middleware
+- 🌐 **Comprehensive HTTP method support**: GET, POST, PUT, PATCH, OPTIONS, HEAD, DELETE #http-methods
+- 🔒 **Built-in security features**: Enhance your application's security out of the box #security
+- 🚀 **Exceptional performance**: Blazing fast, outperforming other popular frameworks #high-performance
+- ⚡ **Low overhead**: Minimal impact on system resources for efficient scaling #efficient
+- 🔧 **HTTP/2 support**: Leverage modern web technologies for improved speed #http2
+- 🔌 **Extensible plugin ecosystem**: Extend functionality with a growing library of plugins #extensible
+
+## 📊 Performance Benchmark
+
+Jai Server significantly outperforms Express.js in rigorous benchmark tests:
+
+### Jai Server Performance
+
+```
+┌─────────┬───────┬───────┬───────┬───────┬──────────┬─────────┬───────┐
+│ Stat    │ 2.5%  │ 50%   │ 97.5% │ 99%   │ Avg      │ Stdev   │ Max   │
+├─────────┼───────┼───────┼───────┼───────┼──────────┼─────────┼───────┤
+│ Latency │ 16 ms │ 18 ms │ 38 ms │ 38 ms │ 24.32 ms │ 8.57 ms │ 54 ms │
+└─────────┴───────┴───────┴───────┴───────┴──────────┴─────────┴───────┘
+┌───────────┬─────────┬─────────┬────────┬─────────┬────────┬────────┬─────────┐
+│ Stat      │ 1%      │ 2.5%    │ 50%    │ 97.5%   │ Avg    │ Stdev  │ Min     │
+├───────────┼─────────┼─────────┼────────┼─────────┼────────┼────────┼─────────┤
+│ Req/Sec   │ 39,519  │ 39,519  │ 40,287 │ 40,959  │ 40,304 │ 483.62 │ 39,497  │
+├───────────┼─────────┼─────────┼────────┼─────────┼────────┼────────┼─────────┤
+│ Bytes/Sec │ 8.34 MB │ 8.34 MB │ 8.5 MB │ 8.64 MB │ 8.5 MB │ 103 kB │ 8.33 MB │
+└───────────┴─────────┴─────────┴────────┴─────────┴────────┴────────┴─────────┘
+
+203k requests in 5.02s, 42.5 MB read
+```
+
+### Express.js Performance
+
+```
+┌─────────┬───────┬───────┬────────┬────────┬──────────┬──────────┬────────┐
+│ Stat    │ 2.5%  │ 50%   │ 97.5%  │ 99%    │ Avg      │ Stdev    │ Max    │
+├─────────┼───────┼───────┼────────┼────────┼──────────┼──────────┼────────┤
+│ Latency │ 68 ms │ 71 ms │ 116 ms │ 126 ms │ 74.66 ms │ 11.31 ms │ 154 ms │
+└─────────┴───────┴───────┴────────┴────────┴──────────┴──────────┴────────┘
+┌───────────┬─────────┬─────────┬─────────┬─────────┬──────────┬──────────┬─────────┐
+│ Stat      │ 1%      │ 2.5%    │ 50%     │ 97.5%   │ Avg      │ Stdev    │ Min     │
+├───────────┼─────────┼─────────┼─────────┼─────────┼──────────┼──────────┼─────────┤
+│ Req/Sec   │ 10,775  │ 10,775  │ 13,855  │ 13,991  │ 13,221.6 │ 1,231.34 │ 10,773  │
+├───────────┼─────────┼─────────┼─────────┼─────────┼──────────┼──────────┼─────────┤
+│ Bytes/Sec │ 2.65 MB │ 2.65 MB │ 3.41 MB │ 3.44 MB │ 3.25 MB  │ 303 kB   │ 2.65 MB │
+└───────────┴─────────┴─────────┴─────────┴─────────┴──────────┴──────────┴─────────┘
+
+67k requests in 5.02s, 16.3 MB read
+```
+
+### Key Performance Insights
+
+- **3x Faster**: Jai Server handles an impressive ~40,304 req/sec compared to Express.js's ~13,221 req/sec
+- **67% Lower Latency**: 24.32ms average for Jai Server vs 74.66ms for Express.js
+- **2.6x Higher Throughput**: 8.5 MB/sec for Jai Server vs 3.25 MB/sec for Express.js
+- **Consistent Performance**: Jai Server shows remarkably low standard deviation in requests per second, indicating stable and reliable performance under high load
+- **Efficient Resource Utilization**: Jai Server processes 3 times more requests while maintaining lower and more consistent latency
+
+Jai Server delivers exceptional, consistent, and scalable performance, making it the ideal choice for high-load applications, microservices, real-time systems, and performance-critical projects. #performance-comparison #high-throughput #low-latency
+
+## 📚 Table of Contents
+
+- [Installation](#-installation)
+- [Usage Examples](#-usage-examples)
+- [API Reference](#-api-reference)
+- [Advanced Features](#-advanced-features)
+- [Contributing](#-contributing)
+- [License](#-license)
+
+## 📥 Installation
+
+Get started with Jai Server in your project:
+
+```bash
+npm install jai-server
+```
+
+## 🎯 Usage Examples
+
+### Basic Server
+
 ```javascript
 const JaiServer = require('jai-server');
 
-const App = JaiServer(
-  {
-    static: {
-      dir: `${__dirname}/public`, // public folder,
-      basePath: '/static', // Optional
-    },
+const app = JaiServer();
 
+app.get('/', (req, res) => {
+  res.send('Welcome to Jai Server!');
+});
+
+app.listen({ port: 3000 }, () => {
+  console.log('Server running on http://localhost:3000');
+});
+```
+
+### Serve Static Files
+
+```javascript
+const JaiServer = require('jai-server');
+
+const app = JaiServer({
+  static: {
+    dir: `${__dirname}/public`,
+    basePath: '/static',
   },
-);
-
-App.listen({ port: 3000 }, (...args) => {
-  console.log('Server is running on port http://localhost:3000', args);
 });
 
-
+app.listen({ port: 3000 }, () => {
+  console.log('Static files served at http://localhost:3000/static');
+});
 ```
 
-#### Jai Server Http2 / Https
-```javascript
+### HTTPS and HTTP/2 Support
 
+```javascript
+const fs = require('fs');
 const JaiServer = require('jai-server');
 
 const app = JaiServer({
-    http2: true,
-    allowHTTP1: true, // allow Http1.0 request
-    https: // enables Https
-      {
-        key: fs.readFileSync('_location_for_key_'),
-        cert: fs.readFileSync('_location_for_cert_'),
-      }
-  
-  });
+  http2: true,
+  allowHTTP1: true,
+  https: {
+    key: fs.readFileSync('path/to/key.pem'),
+    cert: fs.readFileSync('path/to/cert.pem'),
+  },
+});
 
 app.get('/', (req, res) => {
-  res.send('Https: =>Hello World!');
+  res.send('Secure Jai Server!');
 });
 
-app.listen({ port: 430 }, (...args) => {
-  console.log('Server is running on port http://localhost:430', args);
+app.listen({ port: 443 }, () => {
+  console.log('Secure server running on https://localhost');
 });
-
 ```
 
-#### Capture Params
-```javascript
+### RESTful API with Route Parameters
 
+```javascript
 const JaiServer = require('jai-server');
 
-const app = JaiServer({
-    http2: true,
-    allowHTTP1: true, // allow Http1.0 request
-    https: // enables Https
-      {
-        key: fs.readFileSync('_location_for_key_'),
-        cert: fs.readFileSync('_location_for_cert_'),
-      }
-  
-  });
-// url http://localhost:3000/Jai-Server
-app.get('/:firstName-:lastName', (req, res) => {
-  console.log(req.params)
-  res.send(`Hello ${req.params.firstName} ${req.params.lastName}`);
+const app = JaiServer();
+
+app.get('/users/:id', (req, res) => {
+  res.json({ userId: req.params.id, message: 'User details' });
 });
 
-app.listen({ port: 3000 }, (...args) => {
-  console.log('Server is running on port http://localhost:3000', args);
-});
-
+app.listen({ port: 3000 });
 ```
-#### Routes
+
+### Using Middleware and Routers
+
 ```javascript
 const JaiServer = require('jai-server');
 
 const app = JaiServer();
 const router = JaiServer.Router();
-// http://localhost:3000/hello
+
+// Middleware
+app.use((req, res, next) => {
+  console.log(`Request received at ${new Date()}`);
+  next();
+});
+
+// Router
 router.get('/hello', (req, res) => {
-  res.send('Hello World!');
-});
-app.use(router);
-
-// http://localhost:3000
-app.get('/', (req, res) => {
-  res.send('Home Page!');
+  res.send('Hello from the router!');
 });
 
-app.listen({ port: 3000 }, (...args) => {
-  console.log('Server is running on port http://localhost:3000', args);
-});
+app.use('/api', router);
 
+app.listen({ port: 3000 });
 ```
-## API Reference
 
-### Options
+## 📘 API Reference
 
+### JaiServer(options)
 
-| Parameter | Type     | Description                |
-| :-------- | :------- | :------------------------- |
-| `host` | `string` |  host name. default: `localhost`|
-| `port` | `number` | port to use, default: `3000`|
-| `static` | `object` | to serve static files `{dir: "./public_path", basePath: '/public'}`, default: `null`|
-| `https` | `object` | to create secure server `{key,cert}`, default: `3000`|
-| `http2` | `boolean` | to create http2 server, default: `false`|
-| `allowHTTP1` | `boolean` | to serve http1 request on http2 server, default: `true`|
+Creates a new Jai Server instance.
 
-### Author: [@hsk11](https://github.com/hsk11)
+#### Options
+
+| Option | Type | Description | Default |
+|--------|------|-------------|---------|
+| `host` | `string` | Host name | `'localhost'` |
+| `port` | `number` | Port number | `3000` |
+| `static` | `object` | Static file serving options | `null` |
+| `https` | `object` | HTTPS options | `null` |
+| `http2` | `boolean` | Enable HTTP/2 | `false` |
+| `allowHTTP1` | `boolean` | Allow HTTP/1 on HTTP/2 server | `true` |
+
+### app.METHOD(path, handler)
+
+Routes an HTTP request, where METHOD is the HTTP method in lowercase.
+
+```javascript
+app.get('/path', (req, res) => { /* ... */ });
+app.post('/path', (req, res) => { /* ... */ });
+// Other HTTP methods: put, patch, delete, options, head
+```
+
+### app.use([path,] function [, function...])
+
+Mounts middleware function(s) at the specified path.
+
+### app.listen(options[, callback])
+
+Starts the server.
+
+## 🚀 Advanced Features
+
+- **Middleware Chaining**: Create complex request processing pipelines
+- **Custom Error Handling**: Implement application-specific error management
+- **Request Body Parsing**: Built-in support for JSON and URL-encoded bodies
+- **Modular Routing**: Organize routes using the Router class
+- **WebSocket Support**: Real-time, bidirectional communication
+- **Database Integration**: Easy connection with popular databases
+- **Authentication Middleware**: Secure your routes and APIs
+- **Rate Limiting**: Protect your server from abuse
+- **CORS Support**: Configure Cross-Origin Resource Sharing
+- **Compression**: Optimize response size for faster transmission
+
+## 🤝 Contributing
+
+We welcome contributions to Jai Server! Check out our [Contributing Guide](CONTRIBUTING.md) for details on how to get started.
+
+## 📄 License
+
+Jai Server is open-source software licensed under the [MIT license](LICENSE).
+
+---
+
+Built with ❤️ by [Harpal Singh](https://github.com/hsk11)
+
+#jai-server #node-js-framework #web-development #backend #api-development #performance-optimization #microservices #realtime-applications #node-js #web-framework #high-performance #rest-api #http2 #express-alternative #api #web-api #restapi #http-server #nodejs-api
