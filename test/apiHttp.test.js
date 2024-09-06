@@ -505,6 +505,52 @@ test('Automatic Error Handle When Error Handler available', async () => {
   expect(response.status).toBe(500);
   expect(response.body.error).toBe('Test error');
 
+})
+
+
+test('Nested Router', async () => {
+  app.stack = [];
+  const router = JaiServer.Router();
+  const routerNested = JaiServer.Router();
+  router.get('/test', (req, res) => {
+    res.send('Router Test');
+  })
+  routerNested.get('*', (req, res) => {
+    res.send('Router Nested')
+  })
+  router .use(routerNested)
+  app.use( router);
+  app.get('/error', (req, res) => {
+    throw new Error('Test error');
+  });
+  //console.log(app.stack);
+  const response = await request(app).get('/error');
+  expect(response.status).toBe(200);
+  expect(response.text).toBe('Router Nested');
+
+
+})
+
+test('Nested Router Error', async () => {
+  app.stack = [];
+  const router = JaiServer.Router();
+  const routerNested = JaiServer.Router();
+  router.get('/test', (req, res) => {
+    res.send('Router Test');
+  })
+  routerNested.get('*', (req, res) => {
+    throw new Error('Router Nested')
+  })
+  router .use(routerNested)
+  app.use( router);
+  app.get('/error', (req, res) => {
+    throw new Error('Test error');
+  });
+  //console.log(app.stack);
+  const response = await request(app).get('/error');
+  expect(response.status).toBe(500);
+  expect(response.body.error).toBe('Router Nested');
+
 
 })
 

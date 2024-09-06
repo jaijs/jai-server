@@ -19,9 +19,9 @@ function isHandlerObject(handler: any): handler is { stack: RouteObject[] } {
 function Next(req: any, res: any, i: number, mwLength: number, stack: RouteObject[], contUrl = '/'): HandlerFunction {
   return async function NextHandler(nextError: any) {
     try {
-      for (; i <= mwLength - 1; i++) {
+      if ( i <= mwLength - 1) {
         const middleware = stack[i];
-        if (!middleware) continue;
+        if (!middleware) return await Next(req, res, i + 1, mwLength, stack, contUrl)(nextError);
         const { url, isUse, method, handler, isErrorHandler } = middleware;
         let urlMatched;
         let params: Params | boolean = {};

@@ -12,6 +12,13 @@ app.get('/', (req, res, next) => {
   res.send('Hello World');
   next();
 });
+const router = jaiServer.Router();
+router['get']('/test', (req, res, next) => {
+  res.send('Test');
+  next();
+});
+
+app.use(router);
 
 app.use(
   (req, res, next) => {

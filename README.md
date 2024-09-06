@@ -4,6 +4,7 @@
 [![Linkedin: Harpal Singh](https://img.shields.io/badge/-hsk11-blue?style=flat-square&logo=Linkedin&logoColor=white&link=https://www.linkedin.com/in/hsk11)](https://www.linkedin.com/in/hsk11/)
 [![GitHub followers](https://img.shields.io/github/followers/hsk11?label=Follow&style=social)](https://github.com/hsk11)
 
+Fast, Powerfull, Robust web framework for creating API in Node.js
 
 Jai Server is an ultra-high-performance, easy-to-use web framework for Node.js, engineered for building lightning-fast and highly scalable web applications and APIs.
 
@@ -212,6 +213,95 @@ app.use('/api', router);
 app.listen({ port: 3000 });
 ```
 
+
+## Built-in Response Methods
+
+### res.send(data)
+
+Sends a response in HTML, text, or any other format. Automatically sets the appropriate Content-Type header.
+
+```javascript
+app.get('/hello', (req, res) => {
+  res.send('Hello, World!');
+});
+```
+
+### res.json(data)
+
+Sends a JSON response with Content-Type: application/json.
+
+```javascript
+app.get('/user', (req, res) => {
+  res.json({ id: 1, name: 'John Doe' });
+});
+```
+
+### res.redirect(link, [statusCode])
+
+Redirects the client to the given URL. The default status code is 302.
+
+```javascript
+app.get('/old-route', (req, res) => {
+  res.redirect('/new-route');
+});
+```
+
+### res.status(statusCode)
+
+Sets the HTTP status code for the response. Chainable with other response methods.
+
+```javascript
+app.get('/error', (req, res) => {
+  res.status(404).send('Page Not Found');
+});
+```
+
+### res.header(key, value)
+
+Sets custom headers for the response.
+
+```javascript
+app.get('/custom-header', (req, res) => {
+  res.header('X-Custom-Header', 'MyValue').send('Header set!');
+});
+```
+
+### res.sendFile(filePath, [options], [callback])
+
+Serves a file to the client. Options can include root directory, cache settings, etc.
+
+```javascript
+app.get('/download', (req, res) => {
+  res.sendFile('path/to/file.txt');
+});
+```
+
+## Middleware and Routers
+
+Jai Server supports middleware and routers for more complex applications:
+
+```javascript
+const JaiServer = require('jai-server');
+const app = JaiServer();
+const router = JaiServer.Router();
+
+// Middleware
+app.use((req, res, next) => {
+  console.log('Time:', Date.now());
+  next();
+});
+
+// Router
+router.get('/hello', (req, res) => {
+  res.send('Hello from the router!');
+});
+
+app.use('/api', router);
+
+app.listen({ port: 3000 });
+```
+
+
 ## 📘 API Reference
 
 ### JaiServer(options)
@@ -273,3 +363,7 @@ Jai Server is open-source software licensed under the [MIT license](LICENSE).
 Built with ❤️ by [Harpal Singh](https://github.com/hsk11)
 
 #jai-server #node-js-framework #web-development #backend #api-development #performance-optimization #microservices #realtime-applications #node-js #web-framework #high-performance #rest-api #http2 #express-alternative #api #web-api #restapi #http-server #nodejs-api
+Enhanced Response Methods
+
+
+
