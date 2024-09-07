@@ -350,9 +350,7 @@ Starts the server.
 - **CORS Support**: Configure Cross-Origin Resource Sharing
 - **Compression**: Optimize response size for faster transmission
 
-## 🤝 Contributing
 
-We welcome contributions to Jai Server! Check out our [Contributing Guide](CONTRIBUTING.md) for details on how to get started.
 
 ## 📄 License
 

@@ -10,7 +10,7 @@ app.stack = [];
 
 app.get('/', (req, res, next) => {
   res.send('Hello World');
-  next();
+
 });
 const router = jaiServer.Router();
 router['get']('/test', (req, res, next) => {
