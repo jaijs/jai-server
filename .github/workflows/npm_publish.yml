@@ -8,7 +8,7 @@ jobs:
       packages: write
     if:
         contains('
-          refs/heads/master
+          refs/heads/main
         ', github.ref)
     steps:
       - uses: actions/checkout@v4

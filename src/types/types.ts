@@ -62,6 +62,7 @@ export type sendFileOptions={
   etag: true,
   acceptRanges: true,
   cacheControl: true,
+  fallthrough: boolean,
 
 }
 
