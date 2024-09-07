@@ -272,7 +272,11 @@ Serves a file to the client. Options can include root directory, cache settings,
 
 ```javascript
 app.get('/download', (req, res) => {
-  res.sendFile('path/to/file.txt');
+  res.sendFile('path/to/file.txt',{
+    fallthrough:false // Optional: default false
+  },(err)=>{ // Optional Call Back/Next
+
+  });
 });
 ```
 

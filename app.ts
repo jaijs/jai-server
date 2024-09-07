@@ -8,7 +8,7 @@ const app = jaiServer({
 app.get('/', (req, res, next) => {
 
   res.send('Hello World - Jai Server');
-  next();
+  //next(); // calling next middleware
 });
 
 app.listen(1111, () => {

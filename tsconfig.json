@@ -8,7 +8,7 @@
     "moduleResolution": "node",
     "noUnusedParameters": true,
     "noUnusedLocals": true,
-    "target": "es5",
+    "target": "ES2018",
     "declaration": true,
     "outDir": "./dist",
     "noImplicitAny": true,
