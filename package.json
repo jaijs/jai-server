@@ -56,7 +56,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc && node build.js",
+    "build": "tsc",
     "prepublishOnly": "npm run build",
     "start": "node ./dist/index.js",
     "lint": "eslint --ext .js,.ts src",
