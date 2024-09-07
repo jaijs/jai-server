@@ -118,5 +118,29 @@ describe('Jai Server', () => {
       expect(response.status).toBe(200);
       expect(response.text).toBe('Hello from the router!');
     });
+
+    test('send FILE', async () => {
+      app.get('/test.txt', (req, res) => {
+        res.sendFile(path.join(__dirname, 'public', 'test.txt'));
+      });
+
+      const response = await request(app).get('/test.txt');
+      expect(response.status).toBe(404);
+      expect(response.body.message).toBe('Not Found');
+    })
+    test('send FILE with Call Back', async () => {
+      app.get('/test.txt', (req, res) => {
+        res.sendFile(path.join(__dirname, 'public', 'test.txt'),{},(err)=>{
+          if(err){
+            res.status(500).send('Error')
+          }
+        });
+      });
+
+      const response = await request(app).get('/test.txt');
+      expect(response.status).toBe(500);
+      expect(response.text).toBe('Error');
+    })
+
   });
 });

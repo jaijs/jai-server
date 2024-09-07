@@ -57,9 +57,10 @@ const responsePrototype: Partial<ExtendedServerResponse> = {
     self.setHeader(key, value);
     return self;
   },
-  async sendFile(filePath: string, options:sendFileOptions, callback:Function) {
+  sendFile(filePath: string, options:sendFileOptions|object={}, callback:Function) {
     const absolutePath = path.resolve(filePath);
-    sendFile( absolutePath,  options, this, callback, true);
+    
+    return sendFile( absolutePath,  options, this, {},callback, true);
   },
 
   JAI:true
