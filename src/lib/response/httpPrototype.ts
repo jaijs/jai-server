@@ -1,72 +1,59 @@
-import {ExtendedServerResponse,sendFileOptions} from '../../types/types';
+import { ExtendedServerResponse, sendFileOptions } from '../../types/types';
 import * as path from 'path';
-import {sendFile} from 'jai-static'
+import { sendFile } from 'jai-static'
 
 const responsePrototype: Partial<ExtendedServerResponse> = {
   send(data: any = '') {
     const self = this as unknown as ExtendedServerResponse;
-    let finalData = data;
     if (typeof data === 'object') {
-      self.writeHead(self.statusCode || 200, {
-        'Content-Type': self.getHeader('Content-Type') as string || 'application/json',
-      });
-      finalData = JSON.stringify(data);
+      const jsonData = JSON.stringify(data);
+      self.setHeader('Content-Type', 'application/json');
+      self.setHeader('Content-Length', Buffer.byteLength(jsonData));
+      self.writeHead(self.statusCode || 200);
+      self.end(jsonData);
     } else {
-      self.writeHead(self.statusCode || 200, {
-        'Content-Type': self.getHeader('Content-Type') as string || 'text/html',
-      });
+      const strData = String(data);
+      self.setHeader('Content-Type', 'text/html');
+      self.setHeader('Content-Length', Buffer.byteLength(strData));
+      self.writeHead(self.statusCode || 200);
+      self.end(strData);
     }
-    self.write(finalData + "");
-    self.end();
   },
-
   json(data: any = '') {
     const self = this as unknown as ExtendedServerResponse;
-    self.writeHead(self.statusCode || 200, {
-      'Content-Type': self.getHeader('Content-Type') as string || 'application/json',
-    });
-    self.write(typeof data === 'object' ? JSON.stringify(data) : '');
-    self.end();
+    const jsonData = JSON.stringify(data);
+    self.setHeader('Content-Type', 'application/json');
+    self.setHeader('Content-Length', Buffer.byteLength(jsonData));
+    self.writeHead(self.statusCode || 200);
+    self.end(jsonData);
   },
-
-  set(key: string, value: string) {
-    const self = this as unknown as ExtendedServerResponse;
-    self.setHeader(key, value);
+  set: function(key: string, value: string) {
+    (this as unknown as ExtendedServerResponse).setHeader(key, value);
   },
-
   redirect(link: string, statusCode: number = 302) {
     const self = this as unknown as ExtendedServerResponse;
-    self.writeHead(statusCode, {
-      Location: link,
-    });
+    self.writeHead(statusCode, { Location: link });
     self.end();
   },
-
   get(key: string) {
-    const self = this as unknown as ExtendedServerResponse;
-    return self.getHeader(key) as string | undefined;
+    return (this as unknown as ExtendedServerResponse).getHeader(key) as string | undefined;
   },
-
   status(statusCode: number) {
-    const self = this as unknown as ExtendedServerResponse;
-    self.statusCode = statusCode;
-    return self;
+    (this as unknown as ExtendedServerResponse).statusCode = statusCode;
+    return this;
   },
   header(key: string, value: string) {
-    const self = this as unknown as ExtendedServerResponse;
-    self.setHeader(key, value);
-    return self;
+    (this as unknown as ExtendedServerResponse).setHeader(key, value);
+    return this;
   },
-  sendFile(filePath: string, options:Partial<sendFileOptions> ={}, callback:Function) {
-    const absolutePath = path.resolve(filePath);
-    if(!options){
-      options = {}
-    }
-    if(!options.fallthrough) options.fallthrough=false
-    return sendFile( absolutePath,  options, this, {},callback);
-  },
+  async sendFile(filePath: string, options: Partial<sendFileOptions> = {}, callback: Function) {
+    if(!options) options = {};
+    console.log(options)
+    if(!Object.prototype.hasOwnProperty.call(options,'fallthrough'))  options.fallthrough=false;
+    return await sendFile(path.resolve(filePath), options, this as unknown as ExtendedServerResponse, {}, callback);
 
-  JAI:true
+  },
+  JAI: true
 };
 
-export default  responsePrototype;
+export default responsePrototype;

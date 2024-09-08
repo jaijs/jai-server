@@ -1,13 +1,13 @@
 
 
 // Define a type for the handler function
-export type HandlerFunction = (req?: any, res?: any, next?: Function) =>void| Promise<void>;
+export type HandlerFunction = (req?: any, res?: any, next?: Function) =>void| Promise<void>|any;
 export type ErrorHandlerFunction = (error:any,req?: any, res?: any, next?: Function) =>void| Promise<void>;
 import {ServerResponse } from 'http';
 
 
 export type RouteObject = {
-  url?: string | Array<string> | null
+  url?: string | string[] | null
   method?: string | null;
   handler: HandlerFunction |ErrorHandlerFunction | { stack: RouteObject[] } ;
   isUse: boolean;
@@ -15,8 +15,8 @@ export type RouteObject = {
 }
 
 export type RouteObjectMakerArgs = {
-  callback: HandlerFunction | ErrorHandlerFunction| { stack: RouteObject[] } ;
-  url?: string | null | Array<string> 
+  callback: HandlerFunction | ErrorHandlerFunction|Router ;
+  url?: string | null | string[]
   method: string | null
   isUse: boolean,
   isErrorHandler: boolean
@@ -32,7 +32,7 @@ export type Router = {
   delete(url: string, ...middleware: Middleware[]): void;
   options(url: string, ...middleware: Middleware[]): void;
   head(url: string, ...middleware: Middleware[]): void;
-  use(urlOrMiddleware: string | Middleware | Router, ...middleware: Middleware[]|Router[]): void;
+  use(urlOrMiddleware: string |string[] | Middleware | Router, ...middleware: Middleware[]|Router[]): void;
 
 }
 
@@ -67,20 +67,12 @@ export type sendFileOptions={
 }
 
 
-export type ConfigMain= {
-  host?: string;
-  port?: number;
-  static?: any;
-  bodyParser?: any;
-  httpVersion?: string;
-  https?: { key: string; cert: string } | undefined;
-  http2?: boolean;
-  allowHTTP1?: boolean;
-  protocol?: string;
 
-}
 import { ServerResponse as HttpServerResponse } from 'http';
 import { Http2ServerResponse } from 'http2';
+
+
+
 export type JaiServerConfig ={
   http2?: boolean;
   https?: {
@@ -92,6 +84,12 @@ export type JaiServerConfig ={
   [key: string]: any;
   Http1ServerResponse?: typeof HttpServerResponse;
   Http2ServerResponse?: typeof Http2ServerResponse;
+  port?: number;
+  static?: any;
+  bodyParser?: any;
+  httpVersion?: string;
+  protocol?: string;
+  timeout?: number;
 }
 
 export  type Params ={
@@ -113,6 +111,8 @@ export interface RequestObject extends IncomingMessage {
   port?: number;
   query?: Record<string, string>;
   ip?: string;
+  timeOutId?: NodeJS.Timeout|any;
+
 }
 
 
@@ -126,6 +126,7 @@ export interface ExtendedServerResponse extends ServerResponse {
   header: (key: string, value: string) => ExtendedServerResponse;
   sendFile: (filePath: string, options: sendFileOptions, callback: Function) => void;
   JAI: true;
+  clearSetTimeout: () => void;
 }
 
 

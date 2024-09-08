@@ -318,10 +318,13 @@ Creates a new Jai Server instance.
 |--------|------|-------------|---------|
 | `host` | `string` | Host name | `'localhost'` |
 | `port` | `number` | Port number | `3000` |
-| `static` | `object` | Static file serving options | `null` |
+| `static` | `object` | Static file serving options (jai-static) | `null` |
 | `https` | `object` | HTTPS options | `null` |
 | `http2` | `boolean` | Enable HTTP/2 | `false` |
 | `allowHTTP1` | `boolean` | Allow HTTP/1 on HTTP/2 server | `true` |
+| `allowHTTP1` | `boolean` | Allow HTTP/1 on HTTP/2 server | `true` |
+| `timeout` | `number` | Timeout req after ms, default 60000(1min) | `60000` |
+
 
 ### app.METHOD(path, handler)
 

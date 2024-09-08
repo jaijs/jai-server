@@ -1,53 +1,38 @@
 import { Params } from '../types/types';
 
+// Pre-compile regular expressions
+const CATCH_ROUTES_REGEX = /(\*)|(:([a-zA-Z_0-9$]+))/g;
+const TRAILING_SLASH_REGEX = /\/$/;
+const EMPTY_STRING = '';
 
-function Matcher(q: string | undefined, url: string | undefined, fullMatch: boolean = false, strict: boolean = false): Params | boolean {
-  let query = q;
+function Matcher(q: string = '', url: string = '', fullMatch: boolean = false, strict: boolean = false): Params | boolean {
+  // Early return for exact match
+  if (q.indexOf(':') === -1 && q === url) return true;
 
-  if (query === undefined || url === undefined || typeof query !== 'string' || typeof url !== 'string') {
-    return false;
-  }
-
-  if (!strict && query.slice(-1) === '/') {
-    query = query.slice(0, -1);
-  }
-
-  const catchRoutes = ['(\\*)', '(\\:[a-zA-Z_0-9$]+)'];
-  const finalRegex = ['(?:(?:.)*)', '([^\\/]+)'];
-  const exp = catchRoutes.join('|');
-
-  const regX = new RegExp(exp, 'g');
+  const query = strict ? q : q.replace(TRAILING_SLASH_REGEX, EMPTY_STRING);
   const params: Params = {};
-  const finalQuery = query.replace(regX, (match?: string, p1?: string, p2?: string) => {
-    if (p2 !== undefined) {
-      params[p2.substring(1)] = '';
+
+  const finalQuery = query.replace(CATCH_ROUTES_REGEX, (_, wildcard, __, param) => {
+    if (param) {
+      params[param] = EMPTY_STRING;
+      return '([^\\/]+)';
     }
-    if (p1 !== undefined) {
-      return finalRegex[0] as string;
-    } else if (p2 !== undefined) {
-      return finalRegex[1] as string;
-    }
-    return match as string;
+    return wildcard ? '(?:(?:.)*)' : _;
   });
 
-  const matchRegex = new RegExp((fullMatch ? '^' : '') + finalQuery + (!strict ? '/{0,1}' : '') + (fullMatch ? '$' : ''));
+  const matchRegex = new RegExp(
+    `${fullMatch ? '^' : ''}${finalQuery}${strict ? '' : '\\/?'}${fullMatch ? '$' : ''}`
+  );
+
   const matched = url.match(matchRegex);
+  if (!matched) return false;
 
-  if (matched) {
-    const paramsKeys = Object.keys(params);
-
-    for (let i = 1; i < matched.length; i += 1) {
-      // if (isNaN(Number(matched[i]))) {
-      //   params[paramsKeys[i - 1] as string] = matched[i];
-      // } else {
-      //   params[paramsKeys[i - 1] as string] = Number(matched[i]);
-      // } // TODO: Leaving Add number type checking
-      params[paramsKeys[i - 1] as string] = matched[i];
-    }
-    return params;
+  const paramsKeys = Object.keys(params);
+  for (let i = 1; i < matched.length; i++) {
+    params[paramsKeys[i - 1] as string] = matched[i];
   }
 
-  return false;
+  return params;
 }
 
 export default Matcher;

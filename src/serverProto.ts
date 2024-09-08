@@ -23,9 +23,10 @@ class JaiServerFactory {
     return createServerHttp(serverOptions as HttpServerOptions, requestHandler);
   }
 
-  static getServerOptions(options: JaiServerConfig): HttpServerOptions & JaiServerConfig | HttpsServerOptions & JaiServerConfig | Http2ServerOptions & JaiServerConfig {
+  static getServerOptions(options: JaiServerConfig): (HttpServerOptions |HttpsServerOptions| Http2ServerOptions) & JaiServerConfig {
     const serverOptions: HttpsServerOptions | Http2ServerOptions = options.https ? { key: options.https.key, cert: options.https.cert } : {};
     options.protocol = options.https ? 'https' : 'http';
+ 
     return serverOptions;
   }
 
@@ -34,6 +35,7 @@ class JaiServerFactory {
       serverOptions.allowHTTP1 = options.allowHTTP1 !== false;
       if (!options.https) return createServerHttp2(serverOptions as SecureServerOptions, requestHandler);
 
+      
       serverOptions.Http1ServerResponse = ServerResponseHttp as typeof ServerResponse;
       serverOptions.Http2ServerResponse = ServerResponseHttp2
       return createServerHttp2(serverOptions, requestHandler);
@@ -60,7 +62,7 @@ function createProto(config: JaiServerConfig, routes:Router): JaiProto {
      // console.log('listen', this.requestHandler, this.requestHandler.stack);
       const server: JaiServer = JaiServerFactory.createJaiServer(config, routes);
       this.server = server;
-      return this.server.listen(port, host, ...args);
+      return this.server.listen(port||config.pot, host, ...args);
 
 
     },

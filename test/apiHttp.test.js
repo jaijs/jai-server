@@ -30,7 +30,7 @@ describe('Jai-Server Tests', () => {
         }
       });
       const randomPort = Math.floor(Math.random() * 1000) + 3000;
-      server = http.createServer(app).listen(randomPort,()=>{
+      server = http.createServer(app).listen(randomPort, () => {
         done()
       });
       app.use('/error-middleware', errorMiddleware, (req, res) => res.send('OK'));
@@ -45,11 +45,11 @@ describe('Jai-Server Tests', () => {
 
   afterEach((done) => {
     server.close(() => {
-        done();
-      })
+      done();
+    })
   });
 
- 
+
   // Basic routing
   test('GET / should return 200 OK', async () => {
     app.get('/', (req, res) => {
@@ -60,7 +60,7 @@ describe('Jai-Server Tests', () => {
     expect(response.status).toBe(200);
     expect(response.text).toBe('Hello, World!');
   });
-//return
+  //return
   // Route parameters
   test('GET /users/:id should return user ID', async () => {
     app.get('/users/:id', (req, res) => {
@@ -159,7 +159,7 @@ describe('Jai-Server Tests', () => {
   // Large payload
   test('Should handle large payload', async () => {
     app.post('/large-payload', (req, res) => {
- 
+
       res.status(200).json({ size: JSON.stringify(req.body).length });
     });
 
@@ -228,7 +228,7 @@ describe('Jai-Server Tests', () => {
     expect(response.status).toBe(200);
     expect(response.body).toEqual({ userId: '123' });
   });
- 
+
   test('Custom middleware execution', async () => {
     const middleware = (req, res, next) => {
       req.customProp = 'test';
@@ -268,48 +268,231 @@ describe('Jai-Server Tests', () => {
   });
 
 
-describe('Router', () => {
-  test('Basic Router functionality', async () => {
-    const router = JaiServer.Router();
+  describe('Router', () => {
+    test('Basic Router functionality', async () => {
+      const router = JaiServer.Router();
 
-    router.get('/test', (req, res) => {
-      res.send('Router Test');
+      router.get('/test', (req, res) => {
+        res.send('Router Test');
+      });
+
+      app.use('/router', router);
+
+      const response = await request(app).get('/router/test');
+      expect(response.status).toBe(200);
+      expect(response.text).toBe('Router Test');
     });
 
-    app.use('/router', router);
+    test('Router with middleware', async () => {
+      const router = JaiServer.Router();
 
-    const response = await request(app).get('/router/test');
-    expect(response.status).toBe(200);
-    expect(response.text).toBe('Router Test');
+      router.use((req, res, next) => {
+        req.routerMiddleware = true;
+        next();
+      });
+
+      router.get('/middleware', (req, res) => {
+        res.json({ routerMiddleware: req.routerMiddleware });
+      });
+
+      app.use('/router', router);
+
+      const response = await request(app).get('/router/middleware');
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual({ routerMiddleware: true });
+    });
   });
 
-  test('Router with middleware', async () => {
-    const router = JaiServer.Router();
-
-    router.use((req, res, next) => {
-      req.routerMiddleware = true;
-      next();
+  describe('Error Handling', () => {
+    test('404 for undefined routes', async () => {
+      const response = await request(app).get('/undefined-route');
+      expect(response.status).toBe(404);
     });
 
-    router.get('/middleware', (req, res) => {
-      res.json({ routerMiddleware: req.routerMiddleware });
+    test('Custom error handler', async () => {
+      app.get('/error', (req, res) => {
+        throw new Error('Test error');
+      });
+
+      app.use((err, req, res, next) => {
+        res.status(500).json({ error: err.message });
+      });
+
+      const response = await request(app).get('/error');
+      expect(response.status).toBe(500);
+      expect(response.body.error).toEqual('Test error');
+    });
+  });
+
+  describe('Request and Response Objects', () => {
+    test('Request query parameters', async () => {
+      app.get('/query', (req, res) => {
+        res.json(req.query);
+      });
+
+      const response = await request(app).get('/query?name=John&age=30');
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual({ name: 'John', age: '30' });
     });
 
-    app.use('/router', router);
+    test('Response status and headers', async () => {
+      app.get('/custom-response', (req, res) => {
+        res.status(201).header('X-Custom-Header', 'Test').send('Created');
+      });
 
-    const response = await request(app).get('/router/middleware');
-    expect(response.status).toBe(200);
-    expect(response.body).toEqual({ routerMiddleware: true });
+      const response = await request(app).get('/custom-response');
+      expect(response.status).toBe(201);
+      expect(response.headers['x-custom-header']).toBe('Test');
+      expect(response.text).toBe('Created');
+    });
+
+    test('Request body parsing (JSON)', async () => {
+
+      app.post('/parse-json', (req, res) => {
+        res.json(req.body);
+      });
+
+      const response = await request(app)
+        .post('/parse-json')
+        .send({ key: 'value' })
+        .set('Content-Type', 'application/json');
+
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual({ key: 'value' });
+    });
+
+    test('Request body parsing (URL-encoded)', async () => {
+      app.post('/parse-urlencoded', (req, res) => {
+        console.log(req.body);
+        res.json(req.body);
+      });
+
+      const response = await request(app)
+        .post('/parse-urlencoded')
+        .send('key=value')
+        .set('Content-Type', 'application/x-www-form-urlencoded');
+
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual({ key: 'value' });
+    });
   });
-});
 
-describe('Error Handling', () => {
-  test('404 for undefined routes', async () => {
-    const response = await request(app).get('/undefined-route');
-    expect(response.status).toBe(404);
+  describe('Static File Serving', () => {
+    test('Serve static files', async () => {
+
+      // Assuming there's a file named 'test.txt' in the 'public' directory
+      const response = await request(app).get('/public/test.text');
+      expect(response.status).toBe(200);
+      // Add more specific assertions based on the content of your static files
+    });
+
+
   });
 
-  test('Custom error handler', async () => {
+
+  describe("Throw Error on Build Time", () => {
+    test('Should handle errors on Empty Use', async () => {
+      // THIS WILL THROW ERROR
+      expect(() => app.use()).toThrow();
+    });
+
+    test('Should handle errors on empty Url', async () => {
+      // THIS WILL THROW ERROR
+      expect(() => app.use(null, () => { })).toThrow();
+    });
+
+    test('Should handle errors on Null', async () => {
+      // THIS WILL THROW ERROR
+      expect(() => app.use(null, null, null)).toThrow();
+    });
+    test('Should handle errors on Wrong Type', async () => {
+      // THIS WILL THROW ERROR
+      expect(() => app.use(() => { }, () => { }, 1)).toThrow();
+    });
+    test('Should handle errors on Valid Url not invalid Middleware', async () => {
+      // THIS WILL THROW ERROR
+      expect(() => app.use('/', 12)).toThrow();
+    });
+  });
+
+
+  describe('Middleware Error Handling', () => {
+
+
+    test('Synchronous error in middleware', async () => {
+      const response = await request(app).get('/error-middleware');
+      expect(response.status).toBe(500);
+      expect(response.body).toHaveProperty('error', 'Test Error');
+      expect(response.body).not.toHaveProperty('stack');
+      expect(response.body).toHaveProperty('message', 'Internal Server Error - Jai Server');
+    });
+
+    test('Error set on request object', async () => {
+      const response = await request(app).get('/set-error');
+      expect(response.status).toBe(500);
+      expect(response.body).toHaveProperty('error', 'Test error from middleware');
+      expect(response.body).not.toHaveProperty('stack');
+      expect(response.body).toHaveProperty('message', 'Internal Server Error - Jai Server');
+    });
+
+    test('Asynchronous error in middleware', async () => {
+      const response = await request(app).get('/async-error');
+      expect(response.status).toBe(500);
+      expect(response.body).toHaveProperty('error', 'Async error');
+      expect(response.body).not.toHaveProperty('stack');
+      expect(response.body).toHaveProperty('message', 'Internal Server Error - Jai Server');
+
+    });
+
+    test('Error in middleware stack', async () => {
+      // Add a route with multiple middleware where one throws an error
+      app.use('/middleware-stack',
+        (req, res, next) => next(),
+        errorMiddleware,
+        (req, res) => res.send('OK')
+      );
+
+      const response = await request(app).get('/middleware-stack');
+      expect(response.status).toBe(500);
+      expect(response.body).toHaveProperty('error', 'Test Error');
+    });
+
+    test('Custom error handling middleware', async () => {
+      // Define a custom error handling middleware
+      const customErrorHandler = (err, req, res, next) => {
+        res.status(500).json({ customError: err.message });
+      };
+
+      // Add a route that uses the custom error handler
+      app.use('/custom-error', errorMiddleware);
+      app.use(customErrorHandler);
+
+      const response = await request(app).get('/custom-error');
+      expect(response.status).toBe(500);
+      expect(response.body).toHaveProperty('customError', 'Test Error');
+    });
+  });
+
+  test('Automatic Error Handle When no Error Handler', async () => {
+    app.stack = [];
+
+    app.get('/error', (req, res) => {
+      throw new Error('Test error');
+    });
+
+    app.use((req, res, next) => {
+      res.status(500).json({ error: err.message });
+    });
+    //console.log(app.stack);
+    const response = await request(app).get('/error');
+    expect(response.status).toBe(500);
+
+
+  })
+
+  test('Automatic Error Handle When Error Handler available', async () => {
+    app.stack = [];
+
     app.get('/error', (req, res) => {
       throw new Error('Test error');
     });
@@ -317,242 +500,102 @@ describe('Error Handling', () => {
     app.use((err, req, res, next) => {
       res.status(500).json({ error: err.message });
     });
-
+    //console.log(app.stack);
     const response = await request(app).get('/error');
     expect(response.status).toBe(500);
-    expect(response.body.error).toEqual('Test error');
-  });
-});
+    expect(response.body.error).toBe('Test error');
 
-describe('Request and Response Objects', () => {
-  test('Request query parameters', async () => {
-    app.get('/query', (req, res) => {
-      res.json(req.query);
-    });
-
-    const response = await request(app).get('/query?name=John&age=30');
-    expect(response.status).toBe(200);
-    expect(response.body).toEqual({ name: 'John', age: '30' });
-  });
-
-  test('Response status and headers', async () => {
-    app.get('/custom-response', (req, res) => {
-      res.status(201).header('X-Custom-Header', 'Test').send('Created');
-    });
-
-    const response = await request(app).get('/custom-response');
-    expect(response.status).toBe(201);
-    expect(response.headers['x-custom-header']).toBe('Test');
-    expect(response.text).toBe('Created');
-  });
-
-  test('Request body parsing (JSON)', async () => {
-
-    app.post('/parse-json', (req, res) => {
-      res.json(req.body);
-    });
-
-    const response = await request(app)
-      .post('/parse-json')
-      .send({ key: 'value' })
-      .set('Content-Type', 'application/json');
-
-    expect(response.status).toBe(200);
-    expect(response.body).toEqual({ key: 'value' });
-  });
-
-  test('Request body parsing (URL-encoded)', async () => {
-    app.post('/parse-urlencoded', (req, res) => {
-      console.log(req.body);
-      res.json(req.body);
-    });
-
-    const response = await request(app)
-      .post('/parse-urlencoded')
-      .send('key=value')
-      .set('Content-Type', 'application/x-www-form-urlencoded');
-
-    expect(response.status).toBe(200);
-    expect(response.body).toEqual({ key: 'value' });
-  });
-});
-
-describe('Static File Serving', () => {
-  test('Serve static files', async () => {
-
-    // Assuming there's a file named 'test.txt' in the 'public' directory
-    const response = await request(app).get('/public/test.text');
-    expect(response.status).toBe(200);
-    // Add more specific assertions based on the content of your static files
-  });
-
-
-});
-
-
-describe("Throw Error on Build Time",()=>{
-  test('Should handle errors on Empty Use', async () => {
-    // THIS WILL THROW ERROR
-     expect(()=>app.use()).toThrow();
-  });
-
-  test('Should handle errors on empty Url', async () => {
-    // THIS WILL THROW ERROR
-     expect(()=>app.use(null,()=>{})).toThrow();
-  });
-
-  test('Should handle errors on Null', async () => {
-    // THIS WILL THROW ERROR
-     expect(()=>app.use(null,null,null)).toThrow();
-  });
-  test('Should handle errors on Wrong Type', async () => {
-    // THIS WILL THROW ERROR
-     expect(()=>app.use(()=>{},()=>{},1)).toThrow();
-  });
-  test('Should handle errors on Valid Url not invalid Middleware', async () => {
-    // THIS WILL THROW ERROR
-     expect(()=>app.use('/',12)).toThrow();
-  });
-});
-
-
-describe('Middleware Error Handling', () => {
-
-
-  test('Synchronous error in middleware', async () => {
-    const response = await request(app).get('/error-middleware');
-    expect(response.status).toBe(500);
-    expect(response.body).toHaveProperty('error', 'Test Error');
-    expect(response.body).not.toHaveProperty('stack');
-    expect(response.body).toHaveProperty('message', 'Internal Server Error - Jai Server');
-  });
-
-  test('Error set on request object', async () => {
-    const response = await request(app).get('/set-error');
-    expect(response.status).toBe(500);
-    expect(response.body).toHaveProperty('error', 'Test error from middleware');
-    expect(response.body).not.toHaveProperty('stack');
-    expect(response.body).toHaveProperty('message', 'Internal Server Error - Jai Server');
-  });
-
-  test('Asynchronous error in middleware', async () => {
-    const response = await request(app).get('/async-error');
-    expect(response.status).toBe(500);
-    expect(response.body).toHaveProperty('error', 'Async error');
-    expect(response.body).not.toHaveProperty('stack');
-    expect(response.body).toHaveProperty('message', 'Internal Server Error - Jai Server');
-    
-  });
-
-  test('Error in middleware stack', async () => {
-    // Add a route with multiple middleware where one throws an error
-    app.use('/middleware-stack', 
-      (req, res, next) => next(),
-      errorMiddleware,
-      (req, res) => res.send('OK')
-    );
-
-    const response = await request(app).get('/middleware-stack');
-    expect(response.status).toBe(500);
-    expect(response.body).toHaveProperty('error', 'Test Error');
-  });
-
-  test('Custom error handling middleware', async () => {
-    // Define a custom error handling middleware
-    const customErrorHandler = (err, req, res, next) => {
-      res.status(500).json({ customError: err.message });
-    };
-
-    // Add a route that uses the custom error handler
-    app.use('/custom-error', errorMiddleware);
-    app.use(customErrorHandler);
-
-    const response = await request(app).get('/custom-error');
-    expect(response.status).toBe(500);
-    expect(response.body).toHaveProperty('customError', 'Test Error');
-  });
-});
-
-test('Automatic Error Handle When no Error Handler', async () => {
-  app.stack = [];
-
-  app.get('/error', (req, res) => {
-    throw new Error('Test error');
-  });
-
-  app.use((req, res, next) => {
-    res.status(500).json({ error: err.message });
-  });
-  //console.log(app.stack);
-  const response = await request(app).get('/error');
-  expect(response.status).toBe(500);
-
-
-})
-
-test('Automatic Error Handle When Error Handler available', async () => {
-  app.stack = [];
-
-  app.get('/error', (req, res) => {
-    throw new Error('Test error');
-  });
-
-  app.use((err, req, res, next) => {
-    res.status(500).json({ error: err.message });
-  });
-  //console.log(app.stack);
-  const response = await request(app).get('/error');
-  expect(response.status).toBe(500);
-  expect(response.body.error).toBe('Test error');
-
-})
-
-
-test('Nested Router', async () => {
-  app.stack = [];
-  const router = JaiServer.Router();
-  const routerNested = JaiServer.Router();
-  router.get('/test', (req, res) => {
-    res.send('Router Test');
   })
-  routerNested.get('*', (req, res) => {
-    res.send('Router Nested')
+
+
+  test('Nested Router', async () => {
+    app.stack = [];
+    const router = JaiServer.Router();
+    const routerNested = JaiServer.Router();
+    router.get('/test', (req, res) => {
+      res.send('Router Test');
+    })
+    routerNested.get('*', (req, res) => {
+      res.send('Router Nested')
+    })
+    router.use(routerNested)
+    app.use(router);
+    app.get('/error', (req, res) => {
+      throw new Error('Test error');
+    });
+    //console.log(app.stack);
+    const response = await request(app).get('/error');
+    expect(response.status).toBe(200);
+    expect(response.text).toBe('Router Nested');
+
+
   })
-  router .use(routerNested)
-  app.use( router);
-  app.get('/error', (req, res) => {
-    throw new Error('Test error');
-  });
-  //console.log(app.stack);
-  const response = await request(app).get('/error');
-  expect(response.status).toBe(200);
-  expect(response.text).toBe('Router Nested');
+
+  test('Nested Router Error', async () => {
+    app.stack = [];
+    const router = JaiServer.Router();
+    const routerNested = JaiServer.Router();
+    router.get('/test', (req, res) => {
+      res.send('Router Test');
+    })
+    routerNested.get('*', (req, res) => {
+      throw new Error('Router Nested')
+    })
+    router.use(routerNested)
+    app.use(router);
+    app.get('/error', (req, res) => {
+      throw new Error('Test error');
+    });
+    //console.log(app.stack);
+    const response = await request(app).get('/error');
+    expect(response.status).toBe(500);
+    expect(response.body.error).toBe('Router Nested');
 
 
-})
-
-test('Nested Router Error', async () => {
-  app.stack = [];
-  const router = JaiServer.Router();
-  const routerNested = JaiServer.Router();
-  router.get('/test', (req, res) => {
-    res.send('Router Test');
   })
-  routerNested.get('*', (req, res) => {
-    throw new Error('Router Nested')
+
+
+  test('Multi URL Route', async () => {
+    app.stack = [];
+    jest.clearAllMocks();
+    const router = JaiServer.Router();
+    const routerNested = JaiServer.Router();
+    router.get(['/url1', 'url1', 'url3'], (req, res) => {
+      res.send('Ok');
+    })
+    routerNested.get('*', (req, res) => {
+      throw new Error('Router Nested')
+    })
+    router.use(routerNested)
+    app.use(router);
+    //console.log(app.stack);
+    const response = await request(app).get('/url1');
+    expect(response.status).toBe(200);
+    expect(response.text).toBe('Ok');
+
+
   })
-  router .use(routerNested)
-  app.use( router);
-  app.get('/error', (req, res) => {
-    throw new Error('Test error');
-  });
-  //console.log(app.stack);
-  const response = await request(app).get('/error');
-  expect(response.status).toBe(500);
-  expect(response.body.error).toBe('Router Nested');
+
+  test('Multi URL Router', async () => {
+    app.stack = [];
+    jest.clearAllMocks();
+    const router = JaiServer.Router();
+    const routerNested = JaiServer.Router();
+    router.get(['/url1', 'url1', 'url3'], (req, res) => {
+      res.send('Ok');
+    })
+    routerNested.get('*', (req, res) => {
+      //throw new Error('Router Nested')
+      res.send("abc")
+    })
+    router.use(['api1', 'api2'], router, routerNested)
+    app.use(router);
+    //console.log(app.stack);
+    const response = await request(app).get('/api2/url1');
+    expect(response.status).toBe(200);
+    expect(response.text).toBe('Ok');
 
 
-})
-
+  })
 
 });

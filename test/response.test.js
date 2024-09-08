@@ -14,7 +14,7 @@ describe('Jai Server', () => {
           dir: path.join(__dirname, 'public')
         }
       });
-      const randomPort = Math.floor(Math.random() * 1000) + 1111;
+      const randomPort = Math.floor(Math.random() * 1000) + 4111;
       server = http.createServer(app).listen(randomPort,()=>{
         done()
       });
@@ -162,7 +162,7 @@ describe('Jai Server', () => {
       app.get('/test.txt', (req, res, next) => {
         res.sendFile(path.join(__dirname, 'public', 'test.txt'),{fallthrough:true},next);
       });
-
+      
       const response = await request(app).get('/test.txt');
       expect(response.status).toBe(500);
  

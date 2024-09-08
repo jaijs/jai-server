@@ -13,8 +13,8 @@ const error = (e:string)=>new TypeError(e);
 function Router() {
   const routeObj:RouterType = {
     stack: [],
-    addRoute(method: HttpMethod, url: string, ...middleware: Middleware[]): void {
-      if(!url || typeof url !== 'string') {
+    addRoute(method: HttpMethod, url: string|string[], ...middleware: Middleware[]): void {
+      if(!url || (typeof url !== 'string' && !Array.isArray(url))) {
         throw  error(`app.${method.toLowerCase()}() requires a URL string received: ${url} Typeof ${typeof url}`);
       }
       if(middleware.length === 0) {
@@ -54,19 +54,19 @@ function Router() {
       this.addRoute('HEAD', url, ...middleware);
     },
 
-    use(urlOrMiddleware: string | Middleware | ErrorHandlerFunction | RouterType, ...middleware: Middleware[]|RouterType[]): void {
+    use(urlOrMiddleware: string | string[] | RouterType |ErrorHandlerFunction | Middleware, ...middleware: Middleware[]|RouterType[]): void {
       const isUse = true;
       const method = null;
       let isErrorHandler = false;
-      let callback:Middleware|RouterType;
-      let url:null | string = null;
+      let callback:Middleware|RouterType ;
+      let url:null | string |string[]= null;
       const error = (mw:string)=>new TypeError(`app.use() requires middleware function/s or router/s received:${mw} `);
 
-      if(typeof urlOrMiddleware!=='string' && !urlOrMiddleware) {
+      if(typeof urlOrMiddleware!=='string'  && !Array.isArray(urlOrMiddleware) && !urlOrMiddleware) {
         throw error(`${urlOrMiddleware} Typeof ${typeof urlOrMiddleware}`);
       }
 
-      if (typeof urlOrMiddleware === 'string') { // with URL
+      if (typeof urlOrMiddleware === 'string' || Array.isArray(urlOrMiddleware)) { // with URL
         if(!middleware || middleware.length === 0) {
           throw error(`${middleware} Typeof  ${middleware.length==0?' empty array':typeof middleware}`);
         }
@@ -81,7 +81,7 @@ function Router() {
           this.stack.push(RouteObjectMaker({callback, url, method, isUse,isErrorHandler}));
         });
       }
-      else if(typeof urlOrMiddleware === 'function' || urlOrMiddleware.stack) {
+      else if(typeof urlOrMiddleware == 'function' || (urlOrMiddleware as RouterType).stack) { // Router
       
         // First middleware is the callback
         callback = urlOrMiddleware;
