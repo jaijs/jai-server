@@ -59,7 +59,6 @@ function createProto(config: JaiServerConfig, routes:Router): JaiProto {
   const proto = {
     ...routes,
     listen(port: number, host: string = config.host || '', ...args: any[]): JaiServer {
-     // console.log('listen', this.requestHandler, this.requestHandler.stack);
       const server: JaiServer = JaiServerFactory.createJaiServer(config, routes);
       this.server = server;
       return this.server.listen(port||config.pot, host, ...args);

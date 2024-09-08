@@ -48,7 +48,6 @@ const responsePrototype: Partial<ExtendedServerResponse> = {
   },
   async sendFile(filePath: string, options: Partial<sendFileOptions> = {}, callback: Function) {
     if(!options) options = {};
-    console.log(options)
     if(!Object.prototype.hasOwnProperty.call(options,'fallthrough'))  options.fallthrough=false;
     return await sendFile(path.resolve(filePath), options, this as unknown as ExtendedServerResponse, {}, callback);
 
