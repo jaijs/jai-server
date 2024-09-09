@@ -2,12 +2,16 @@
 ![Jai-Server logo](./jai-server.png)
 Fast, Powerfull, Robust web framework for creating API in Node.js
 
+---
+
 [![Twitter Follow](https://img.shields.io/twitter/follow/hsk11dev?label=Follow)](https://twitter.com/intent/follow?screen_name=hsk11dev)
 [![Linkedin: Harpal Singh](https://img.shields.io/badge/-hsk11-blue?style=flat-square&logo=Linkedin&logoColor=white&link=https://www.linkedin.com/in/hsk11)](https://www.linkedin.com/in/hsk11/)
 [![GitHub followers](https://img.shields.io/github/followers/hsk11?label=Follow&style=social)](https://github.com/hsk11)
 [![npm version](https://badge.fury.io/js/jai-server.svg)](https://www.npmjs.com/package/jai-server)
 
+---
 
+## About
 
 Jai Server is an ultra-high-performance, easy-to-use web framework for Node.js, engineered for building lightning-fast and highly scalable web applications and APIs.
 
