@@ -57,20 +57,20 @@ Jai Server significantly outperforms Express.js in rigorous benchmark tests:
 ### Jai Server Performance
 
 ```
-┌─────────┬───────┬───────┬───────┬───────┬──────────┬─────────┬───────┐
-│ Stat    │ 2.5%  │ 50%   │ 97.5% │ 99%   │ Avg      │ Stdev   │ Max   │
-├─────────┼───────┼───────┼───────┼───────┼──────────┼─────────┼───────┤
-│ Latency │ 16 ms │ 18 ms │ 38 ms │ 38 ms │ 24.32 ms │ 8.57 ms │ 54 ms │
-└─────────┴───────┴───────┴───────┴───────┴──────────┴─────────┴───────┘
-┌───────────┬─────────┬─────────┬────────┬─────────┬────────┬────────┬─────────┐
-│ Stat      │ 1%      │ 2.5%    │ 50%    │ 97.5%   │ Avg    │ Stdev  │ Min     │
-├───────────┼─────────┼─────────┼────────┼─────────┼────────┼────────┼─────────┤
-│ Req/Sec   │ 39,519  │ 39,519  │ 40,287 │ 40,959  │ 40,304 │ 483.62 │ 39,497  │
-├───────────┼─────────┼─────────┼────────┼─────────┼────────┼────────┼─────────┤
-│ Bytes/Sec │ 8.34 MB │ 8.34 MB │ 8.5 MB │ 8.64 MB │ 8.5 MB │ 103 kB │ 8.33 MB │
-└───────────┴─────────┴─────────┴────────┴─────────┴────────┴────────┴─────────┘
+┌─────────┬───────┬───────┬───────┬───────┬──────────┬──────────┬────────┐
+│ Stat    │ 2.5%  │ 50%   │ 97.5% │ 99%   │ Avg      │ Stdev    │ Max    │
+├─────────┼───────┼───────┼───────┼───────┼──────────┼──────────┼────────┤
+│ Latency │ 14 ms │ 17 ms │ 39 ms │ 52 ms │ 22.46 ms │ 15.01 ms │ 566 ms │
+└─────────┴───────┴───────┴───────┴───────┴──────────┴──────────┴────────┘
+┌───────────┬─────────┬─────────┬─────────┬─────────┬──────────┬──────────┬─────────┐
+│ Stat      │ 1%      │ 2.5%    │ 50%     │ 97.5%   │ Avg      │ Stdev    │ Min     │
+├───────────┼─────────┼─────────┼─────────┼─────────┼──────────┼──────────┼─────────┤
+│ Req/Sec   │ 34,015  │ 34,015  │ 45,759  │ 46,719  │ 43,497.6 │ 4,771.65 │ 34,011  │
+├───────────┼─────────┼─────────┼─────────┼─────────┼──────────┼──────────┼─────────┤
+│ Bytes/Sec │ 6.74 MB │ 6.74 MB │ 9.06 MB │ 9.25 MB │ 8.61 MB  │ 943 kB   │ 6.73 MB │
+└───────────┴─────────┴─────────┴─────────┴─────────┴──────────┴──────────┴─────────┘
 
-203k requests in 5.02s, 42.5 MB read
+219k requests in 5.03s, 43.1 MB read
 ```
 
 ### Express.js Performance
@@ -368,10 +368,15 @@ Jai Server is open-source software licensed under the [MIT license](LICENSE).
 
 ---
 
+
+## Author
+
+Harpal Singh: [@hsk11](https://github.com/hsk11) . **Website**: [Jaijs.org](https://jaijs.org/).
+
 Built with ❤️ by [Harpal Singh](https://github.com/hsk11)
 
 #jai-server #node-js-framework #web-development #backend #api-development #performance-optimization #microservices #realtime-applications #node-js #web-framework #high-performance #rest-api #http2 #express-alternative #api #web-api #restapi #http-server #nodejs-api
-Enhanced Response Methods
+Enhanced Response Methods #jaijs
 
 
 

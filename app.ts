@@ -1,4 +1,4 @@
-let jaiServer = require('./src/index.ts');
+let jaiServer = require('./dist/index.js');
 const path = require('path');
 const app = jaiServer({
 

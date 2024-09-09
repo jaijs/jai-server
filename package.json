@@ -62,7 +62,7 @@
     "lint": "eslint --ext .js,.ts src",
     "lint:fix": "eslint --fix --ext .js,.ts src",
     "test": "npm run build && jest --verbose",
-    "appcluster": " fuser -k 1111/tcp;ts-node --transpile-only app.ts"
+    "app": "fuser -k 1111/tcp;ts-node --transpile-only app.ts"
   },
   "author": {
     "name": "Harpal Singh",
@@ -76,7 +76,7 @@
   },
   "dependencies": {
     "jai-body-parser": "^1.1.45",
-    "jai-static": "^1.11.4"
+    "jai-static": "^1.11.41"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^8.4.0",
